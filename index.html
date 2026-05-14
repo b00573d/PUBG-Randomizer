@@ -553,4 +553,92 @@
         { name: "PP-19 Bizon", type: "Пистолет-пулемёт" },
         { name: "Tommy Gun", type: "Пистолет-пулемёт" },
         { name: "DBS", type: "Дробовик" },
-        { name: "S12K", type: "Дробови
+        { name: "S12K", type: "Дробовик" },
+        { name: "S686", type: "Дробовик" },
+        { name: "M249", type: "Пулемёт" },
+        { name: "DP-28", type: "Пулемёт" },
+        { name: "Crossbow", type: "Арбалет" },
+        { name: "Deagle", type: "Пистолет" },
+        { name: "Glock 18C", type: "Пистолет" }
+    ];
+
+    function getRandomWeapon() {
+        const randomIndex = Math.floor(Math.random() * weaponsList.length);
+        return { ...weaponsList[randomIndex] };
+    }
+
+    function getTwoDistinctWeapons() {
+        let weaponA = getRandomWeapon();
+        let weaponB = getRandomWeapon();
+        let attempts = 0;
+        while (weaponA.name === weaponB.name && attempts < 6) {
+            weaponB = getRandomWeapon();
+            attempts++;
+        }
+        return [weaponA, weaponB];
+    }
+
+    const weaponName1 = document.getElementById('weaponName1');
+    const weaponIcon1 = document.getElementById('weaponIcon1');
+    const weaponType1 = document.getElementById('weaponType1');
+    const weaponName2 = document.getElementById('weaponName2');
+    const weaponIcon2 = document.getElementById('weaponIcon2');
+    const weaponType2 = document.getElementById('weaponType2');
+    const rollBtn = document.getElementById('rollBtn');
+    const slot1Div = document.getElementById('weaponSlot1');
+    const slot2Div = document.getElementById('weaponSlot2');
+
+    function updateWeaponDisplay(weapon, iconContainer, nameElem, typeElem) {
+        nameElem.innerText = weapon.name;
+        typeElem.innerText = weapon.type;
+        iconContainer.innerHTML = getWeaponSVG(weapon.name);
+    }
+
+    function animateSlot(slotElement) {
+        slotElement.classList.add('animate-weapon');
+        setTimeout(() => {
+            slotElement.classList.remove('animate-weapon');
+        }, 350);
+    }
+
+    function updateWeapons() {
+        const [weaponObj1, weaponObj2] = getTwoDistinctWeapons();
+        updateWeaponDisplay(weaponObj1, weaponIcon1, weaponName1, weaponType1);
+        updateWeaponDisplay(weaponObj2, weaponIcon2, weaponName2, weaponType2);
+        animateSlot(slot1Div);
+        animateSlot(slot2Div);
+        rollBtn.style.transform = "scale(0.98)";
+        setTimeout(() => { rollBtn.style.transform = ""; }, 100);
+    }
+
+    function initRandomOnLoad() {
+        const [firstWeapon, secondWeapon] = getTwoDistinctWeapons();
+        updateWeaponDisplay(firstWeapon, weaponIcon1, weaponName1, weaponType1);
+        updateWeaponDisplay(secondWeapon, weaponIcon2, weaponName2, weaponType2);
+        setTimeout(() => {
+            animateSlot(slot1Div);
+            animateSlot(slot2Div);
+        }, 100);
+    }
+
+    rollBtn.addEventListener('click', () => {
+        updateWeapons();
+        rollBtn.style.boxShadow = "0 5px 0 #0f130b";
+        setTimeout(() => {
+            rollBtn.style.boxShadow = "0 8px 0 #0f130b";
+        }, 80);
+    });
+
+    initRandomOnLoad();
+
+    window.addEventListener('keydown', (e) => {
+        if (e.code === 'Space' && !e.repeat && document.activeElement !== rollBtn) {
+            e.preventDefault();
+            updateWeapons();
+            rollBtn.style.transform = "scale(0.96)";
+            setTimeout(() => { if(rollBtn) rollBtn.style.transform = ""; }, 120);
+        }
+    });
+</script>
+</body>
+</html>
