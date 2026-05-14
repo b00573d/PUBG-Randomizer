@@ -2,643 +2,227 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PUBG RANDOMIZER</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            user-select: none;
         }
-
         body {
-            min-height: 100vh;
             background: radial-gradient(circle at 20% 30%, #1a2a1f, #0a0f0a);
-            font-family: 'Segoe UI', 'Poppins', system-ui, sans-serif;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
         }
-
         .card {
-            max-width: 1100px;
-            width: 100%;
-            background: rgba(10, 14, 8, 0.85);
-            backdrop-filter: blur(4px);
-            border-radius: 60px 40px 60px 40px;
-            border: 2px solid rgba(210, 180, 70, 0.7);
-            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.6), inset 0 1px 2px rgba(255, 255, 200, 0.1);
-            padding: 30px 25px 40px 25px;
+            background: rgba(10, 14, 8, 0.9);
+            border-radius: 40px;
+            border: 2px solid #c9a03d;
+            padding: 30px;
             text-align: center;
+            max-width: 900px;
+            width: 100%;
         }
-
-        .game-title {
-            font-size: 2.5rem;
-            font-weight: 800;
-            letter-spacing: 4px;
-            background: linear-gradient(135deg, #f5e56b, #c9a03d);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 2px 3px rgba(0,0,0,0.4);
-            margin-bottom: 10px;
-            text-transform: uppercase;
+        h1 {
+            font-size: 2.2rem;
+            color: #f5e56b;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 15px;
+            margin-bottom: 15px;
         }
-
-        .pan-icon {
-            font-size: 2.2rem;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
-            transform: rotate(-15deg);
+        .pan {
+            font-size: 2rem;
         }
-
         .sub {
             color: #bcab6e;
-            font-weight: 500;
-            border-top: 1px dashed #5a4a2a;
-            display: inline-block;
-            padding-top: 8px;
             margin-bottom: 30px;
-            font-size: 1rem;
         }
-
-        .badge-universal {
-            background: #3a4a2a;
-            display: inline-block;
-            font-size: 0.7rem;
-            padding: 2px 10px;
-            border-radius: 20px;
-            margin-left: 10px;
-            vertical-align: middle;
-            color: #e9f5cf;
-        }
-
-        .badge-ground {
-            background: #6a3a2a;
-            display: inline-block;
-            font-size: 0.65rem;
-            padding: 2px 8px;
-            border-radius: 20px;
-            margin-left: 5px;
-            vertical-align: middle;
-            color: #ffccaa;
-        }
-
-        .weapons-panel {
+        .weapons {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 35px;
-            margin: 30px 0 35px;
+            gap: 30px;
+            margin: 30px 0;
         }
-
         .weapon-slot {
-            background: linear-gradient(145deg, #0e130b, #080c06);
-            border-radius: 32px;
-            padding: 25px 15px;
-            width: 280px;
-            min-width: 250px;
-            flex: 1;
-            box-shadow: 0 12px 20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,200,0.1);
+            background: #0e130b;
+            border-radius: 25px;
+            padding: 25px;
+            width: 260px;
             border: 1px solid #4e6b2c;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+            transition: 0.2s;
         }
-
-        .weapon-slot::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(210, 180, 70, 0.1), transparent);
-            transition: left 0.5s;
-        }
-
-        .weapon-slot:hover::before {
-            left: 100%;
-        }
-
         .weapon-slot:hover {
-            transform: translateY(-8px);
-            border-color: #cfb053;
-            box-shadow: 0 20px 30px rgba(0,0,0,0.6);
+            transform: translateY(-5px);
+            border-color: #c9a03d;
         }
-
         .slot-label {
-            font-size: 1.2rem;
             background: #2a2416;
             display: inline-block;
             padding: 5px 18px;
             border-radius: 40px;
             color: #eace7b;
             font-weight: bold;
-            letter-spacing: 1px;
             margin-bottom: 20px;
-            border: 1px solid #7e6a3e;
         }
-
         .weapon-icon {
+            font-size: 4rem;
             margin: 15px 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100px;
         }
-
-        .weapon-icon svg {
-            width: 85px;
-            height: 85px;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
-            transition: transform 0.2s;
-        }
-
-        .weapon-slot:hover .weapon-icon svg {
-            transform: scale(1.05);
-        }
-
         .weapon-name {
-            font-size: 1.8rem;
-            font-weight: 800;
+            font-size: 1.6rem;
+            font-weight: bold;
             color: #f7f3da;
-            text-shadow: 0 2px 0 #2f3e1c;
-            margin: 12px 0 5px;
-            word-break: break-word;
-            background: #1e2817b3;
+            background: #1e2817;
             display: inline-block;
-            padding: 0 12px;
-            border-radius: 60px;
-        }
-
-        .weapon-type {
-            font-size: 0.85rem;
-            color: #b9b27a;
-            background: #1e2218;
-            display: inline-block;
-            padding: 4px 12px;
+            padding: 5px 15px;
             border-radius: 40px;
-            margin-top: 10px;
         }
-
-        .randomize-btn {
+        .weapon-type {
+            color: #b9b27a;
+            margin-top: 12px;
+            font-size: 0.8rem;
+        }
+        button {
             background: linear-gradient(145deg, #2c3e1f, #1e2a14);
             border: none;
-            padding: 16px 32px;
-            font-size: 1.7rem;
+            padding: 15px 35px;
+            font-size: 1.5rem;
             font-weight: bold;
-            text-transform: uppercase;
             color: #ffeaac;
             border-radius: 60px;
             cursor: pointer;
             box-shadow: 0 8px 0 #0f130b;
-            transition: 0.07s linear;
-            width: 80%;
-            max-width: 380px;
-            letter-spacing: 2px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            margin: 10px auto;
-            font-family: inherit;
+            margin-top: 15px;
         }
-
-        .randomize-btn:active {
+        button:active {
             transform: translateY(4px);
             box-shadow: 0 4px 0 #0f130b;
         }
-
-        .reroll-hint {
-            font-size: 0.85rem;
-            margin-top: 20px;
+        .hint {
             color: #7f8c5e;
-            background: #1f261a70;
-            display: inline-block;
-            padding: 6px 18px;
-            border-radius: 40px;
-            backdrop-filter: blur(2px);
+            margin-top: 20px;
+            font-size: 0.8rem;
         }
-
         @keyframes pop {
-            0% { transform: scale(0.85); opacity: 0; }
-            80% { transform: scale(1.02); }
+            0% { transform: scale(0.9); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
         }
-
-        .animate-weapon {
-            animation: pop 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        .animate {
+            animation: pop 0.3s ease;
         }
-
         footer {
-            margin-top: 28px;
+            margin-top: 25px;
             font-size: 0.7rem;
             color: #6c6e4e;
-        }
-
-        @media (max-width: 700px) {
-            .weapons-panel {
-                gap: 20px;
-            }
-            .weapon-name {
-                font-size: 1.4rem;
-            }
-            .weapon-icon svg {
-                width: 65px;
-                height: 65px;
-            }
-            .randomize-btn {
-                font-size: 1.3rem;
-                padding: 12px 20px;
-            }
-            .card {
-                padding: 20px 16px;
-            }
-            .game-title {
-                font-size: 1.8rem;
-            }
         }
     </style>
 </head>
 <body>
-
 <div class="card">
-    <div class="game-title">
-        <span class="pan-icon">🍳</span>
+    <h1>
+        <span class="pan">🍳</span>
         PUBG RANDOMIZER
-        <span class="pan-icon" style="transform: rotate(15deg);">🍳</span>
-    </div>
-    <div class="sub">
-        🎲 нажми — получи 2 пушки | играй только с ними 🎲
-        <span class="badge-universal">🌍 все карты</span>
-        <span class="badge-ground">🎯 ground loot</span>
-    </div>
+        <span class="pan">🍳</span>
+    </h1>
+    <div class="sub">🎲 нажми — получи 2 пушки | играй только с ними 🎲</div>
 
-    <div class="weapons-panel">
-        <div class="weapon-slot" id="weaponSlot1">
+    <div class="weapons">
+        <div class="weapon-slot" id="slot1">
             <div class="slot-label">ОСНОВНОЕ</div>
-            <div class="weapon-icon" id="weaponIcon1"></div>
-            <div class="weapon-name" id="weaponName1">—</div>
-            <div class="weapon-type" id="weaponType1">жду рандома</div>
+            <div class="weapon-icon" id="icon1">🔫</div>
+            <div class="weapon-name" id="name1">—</div>
+            <div class="weapon-type" id="type1">жду рандома</div>
         </div>
-
-        <div class="weapon-slot" id="weaponSlot2">
+        <div class="weapon-slot" id="slot2">
             <div class="slot-label">ВТОРОЕ</div>
-            <div class="weapon-icon" id="weaponIcon2"></div>
-            <div class="weapon-name" id="weaponName2">—</div>
-            <div class="weapon-type" id="weaponType2">жду рандома</div>
+            <div class="weapon-icon" id="icon2">🔫</div>
+            <div class="weapon-name" id="name2">—</div>
+            <div class="weapon-type" id="type2">жду рандома</div>
         </div>
     </div>
 
-    <button class="randomize-btn" id="rollBtn">🎲 ВЫБРАТЬ ОРУЖИЕ 🎲</button>
-    <div class="reroll-hint">⚡ нажми, чтобы получить новый набор | только эти два до конца матча ⚡</div>
+    <button id="rollBtn">🎲 ВЫБРАТЬ ОРУЖИЕ 🎲</button>
+    <div class="hint">⚡ нажми, чтобы получить новый набор | только эти два до конца матча ⚡</div>
     <footer>🔥 только наземный лут | нет крэйтов, нет карточных эксклюзивов 🔥</footer>
 </div>
 
 <script>
-    // ==============================================================
-    // PUBG RANDOMIZER - ТОЛЬКО GROUND LOOT | ВСЕ КАРТЫ
-    // ==============================================================
-
-    function getWeaponSVG(weaponName) {
-        const name = weaponName.toLowerCase();
-        
-        // M416
-        if (name.includes('m416')) {
-            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="30" y="38" width="50" height="14" rx="2" fill="#2d2d2d" stroke="#9a9a9a" stroke-width="1.2"/>
-                <rect x="36" y="33" width="8" height="5" fill="#3a3a3a" stroke="#777" stroke-width="0.8"/>
-                <rect x="70" y="40" width="12" height="10" rx="2" fill="#1a1a1a" stroke="#666" stroke-width="1"/>
-                <rect x="28" y="52" width="5" height="18" rx="2" fill="#4a3a2a" stroke="#aa8a5a" stroke-width="1"/>
-                <rect x="74" y="43" width="4" height="4" rx="1" fill="#555"/>
-                <text x="48" y="65" font-size="6" fill="#666" text-anchor="middle">M416</text>
-            </svg>`;
-        }
-        
-        // AKM
-        if (name.includes('akm')) {
-            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="28" y="40" width="48" height="14" rx="2" fill="#3a3025" stroke="#aa8a5a" stroke-width="1.2"/>
-                <rect x="33" y="35" width="10" height="5" fill="#2a2218" stroke="#886a3a" stroke-width="0.8"/>
-                <rect x="66" y="42" width="12" height="10" rx="2" fill="#1a1510" stroke="#775a2a" stroke-width="1"/>
-                <path d="M26 48 L24 68 L32 68 L30 48 Z" fill="#5a4a2a" stroke="#bb8a4a" stroke-width="1"/>
-                <rect x="70" y="45" width="4" height="4" rx="1" fill="#555"/>
-                <text x="48" y="65" font-size="6" fill="#886a3a" text-anchor="middle">AKM</text>
-            </svg>`;
-        }
-        
-        // SCAR-L
-        if (name.includes('scar')) {
-            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="28" y="39" width="52" height="14" rx="3" fill="#4a4535" stroke="#bb9a5a" stroke-width="1.2"/>
-                <rect x="35" y="34" width="7" height="5" fill="#3a3525" stroke="#997a3a" stroke-width="0.8"/>
-                <rect x="68" y="41" width="12" height="10" rx="2" fill="#2a2520" stroke="#886a3a" stroke-width="1"/>
-                <rect x="26" y="53" width="5" height="17" rx="2" fill="#5a4a3a" stroke="#bb9a5a" stroke-width="1"/>
-                <text x="50" y="65" font-size="6" fill="#997a3a" text-anchor="middle">SCAR</text>
-            </svg>`;
-        }
-
-        // Beryl
-        if (name.includes('beryl')) {
-            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="27" y="38" width="50" height="15" rx="2" fill="#3a3530" stroke="#aa8a5a" stroke-width="1.2"/>
-                <rect x="32" y="33" width="8" height="5" fill="#2a2520" stroke="#886a3a" stroke-width="0.8"/>
-                <rect x="67" y="40" width="12" height="11" rx="2" fill="#1a1512" stroke="#775a2a" stroke-width="1"/>
-                <rect x="25" y="53" width="5" height="17" rx="2" fill="#5a4a3a" stroke="#bb9a5a" stroke-width="1"/>
-                <text x="48" y="65" font-size="5" fill="#886a3a" text-anchor="middle">BERYL</text>
-            </svg>`;
-        }
-
-        // Kar98k
-        if (name.includes('kar98k') || name.includes('kar')) {
-            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="22" y="42" width="56" height="10" rx="2" fill="#5a4a3a" stroke="#ccaa6a" stroke-width="1.2"/>
-                <rect x="68" y="39" width="14" height="16" rx="3" fill="#3a2a1a" stroke="#aa8a4a" stroke-width="1.2"/>
-                <ellipse cx="50" cy="47" rx="7" ry="5" fill="#2a2015" stroke="#997a3a" stroke-width="0.8"/>
-                <rect x="20" y="52" width="5" height="18" rx="2" fill="#6a5a4a" stroke="#ccaa7a" stroke-width="1"/>
-                <line x1="76" y1="47" x2="86" y2="47" stroke="#ccaa6a" stroke-width="2"/>
-                <text x="48" y="68" font-size="6" fill="#aa8a4a" text-anchor="middle">KAR98</text>
-            </svg>`;
-        }
-        
-        // M24
-        if (name.includes('m24')) {
-            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="20" y="43" width="58" height="9" rx="2" fill="#4a5a4a" stroke="#aabb7a" stroke-width="1.2"/>
-                <rect x="66" y="40" width="14" height="15" rx="3" fill="#2a3a2a" stroke="#99aa5a" stroke-width="1.2"/>
-                <rect x="18" y="52" width="5" height="17" rx="2" fill="#5a6a5a" stroke="#bbcc8a" stroke-width="1"/>
-                <rect x="70" y="44" width="5" height="4" rx="1" fill="#555"/>
-                <text x="48" y="67" font-size="6" fill="#99aa5a" text-anchor="middle">M24</text>
-            </svg>`;
-        }
-
-        // SVD
-        if (name.includes('svd') || name.includes('dragunov')) {
-            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="24" y="42" width="54" height="10" rx="2" fill="#5a5a4a" stroke="#bbbb7a" stroke-width="1.2"/>
-                <rect x="66" y="39" width="13" height="16" rx="3" fill="#3a3a2a" stroke="#aaaa5a" stroke-width="1.2"/>
-                <rect x="22" y="52" width="5" height="18" rx="2" fill="#6a6a5a" stroke="#cccc8a" stroke-width="1"/>
-                <line x1="73" y1="47" x2="83" y2="47" stroke="#bbbb7a" stroke-width="1.5"/>
-                <text x="48" y="67" font-size="6" fill="#aaaa5a" text-anchor="middle">SVD</text>
-            </svg>`;
-        }
-
-        // Mini-14
-        if (name.includes('mini')) {
-            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="28" y="44" width="50" height="9" rx="2" fill="#4a4a4a" stroke="#aaaaaa" stroke-width="1.2"/>
-                <rect x="66" y="41" width="12" height="15" rx="2" fill="#2a2a2a" stroke="#888888" stroke-width="1.2"/>
-                <rect x="26" y="53" width="5" height="16" rx="2" fill="#5a5a5a" stroke="#bbbbbb" stroke-width="1"/>
-                <text x="48" y="66" font-size="5" fill="#888" text-anchor="middle">MINI</text>
-            </svg>`;
-        }
-
-        // SLR
-        if (name.includes('slr')) {
-            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="25" y="41" width="54" height="11" rx="2" fill="#5a4a3a" stroke="#ccaa6a" stroke-width="1.2"/>
-                <rect x="67" y="38" width="13" height="17" rx="3" fill="#3a2a1a" stroke="#bb8a4a" stroke-width="1.2"/>
-                <rect x="23" y="52" width="5" height="18" rx="2" fill="#6a5a4a" stroke="#ddbb7a" stroke-width="1"/>
-                <text x="48" y="66" font-size="5" fill="#bb8a4a" text-anchor="middle">SLR</text>
-            </svg>`;
-        }
-
-        // UMP
-        if (name.includes('ump')) {
-            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="32" y="44" width="46" height="12" rx="2" fill="#3a3a3a" stroke="#999" stroke-width="1.2"/>
-                <rect x="36" y="40" width="6" height="4" fill="#2a2a2a"/>
-                <rect x="68" y="46" width="11" height="8" rx="2" fill="#1a1a1a" stroke="#666" stroke-width="1"/>
-                <rect x="30" y="56" width="5" height="14" rx="2" fill="#5a4a3a" stroke="#bb9a6a" stroke-width="1"/>
-                <rect x="72" y="48" width="4" height="4" rx="1" fill="#444"/>
-                <text x="48" y="66" font-size="5" fill="#888" text-anchor="middle">UMP</text>
-            </svg>`;
-        }
-        
-        // Vector
-        if (name.includes('vector')) {
-            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="30" y="45" width="48" height="10" rx="2" fill="#4a4540" stroke="#aa9a80" stroke-width="1.2"/>
-                <rect x="68" y="47" width="10" height="6" rx="1" fill="#2a2a2a" stroke="#888" stroke-width="1"/>
-                <rect x="28" y="55" width="4" height="13" rx="2" fill="#5a4a3a" stroke="#bbaa7a" stroke-width="1"/>
-                <rect x="35" y="41" width="4" height="4" fill="#3a3a3a"/>
-                <text x="48" y="64" font-size="5" fill="#aa9a80" text-anchor="middle">VECTOR</text>
-            </svg>`;
-        }
-
-        // MP5K
-        if (name.includes('mp5k')) {
-            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="31" y="43" width="47" height="11" rx="2" fill="#3a4a3a" stroke="#99bb6a" stroke-width="1.2"/>
-                <rect x="68" y="45" width="10" height="7" rx="1" fill="#2a3a2a" stroke="#88aa5a" stroke-width="1"/>
-                <rect x="29" y="54" width="5" height="14" rx="2" fill="#5a6a4a" stroke="#bbdd8a" stroke-width="1"/>
-                <text x="48" y="64" font-size="5" fill="#88aa5a" text-anchor="middle">MP5K</text>
-            </svg>`;
-        }
-
-        // Tommy Gun
-        if (name.includes('tommy')) {
-            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="28" y="43" width="50" height="12" rx="2" fill="#5a4a3a" stroke="#ccaa6a" stroke-width="1.2"/>
-                <circle cx="52" cy="49" r="7" fill="#3a2a1a" stroke="#bb8a4a" stroke-width="1"/>
-                <rect x="26" y="55" width="5" height="16" rx="2" fill="#6a5a4a" stroke="#ddbb7a" stroke-width="1"/>
-                <text x="48" y="66" font-size="5" fill="#bb8a4a" text-anchor="middle">TOMMY</text>
-            </svg>`;
-        }
-
-        // DBS
-        if (name.includes('dbs')) {
-            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="27" y="41" width="44" height="18" rx="3" fill="#4a3a2a" stroke="#ccaa6a" stroke-width="1.2"/>
-                <rect x="60" y="44" width="11" height="12" rx="2" fill="#2a1a0a" stroke="#aa8a3a" stroke-width="1"/>
-                <rect x="68" y="47" width="3" height="6" rx="1" fill="#555"/>
-                <rect x="25" y="59" width="5" height="14" rx="2" fill="#6a5a4a" stroke="#ddbb7a" stroke-width="1"/>
-                <text x="46" y="68" font-size="5" fill="#aa8a3a" text-anchor="middle">DBS</text>
-            </svg>`;
-        }
-        
-        // S686
-        if (name.includes('s686')) {
-            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="32" y="43" width="40" height="14" rx="2" fill="#5a4a3a" stroke="#ddbb7a" stroke-width="1.2"/>
-                <rect x="62" y="46" width="9" height="8" rx="2" fill="#3a2a1a" stroke="#bb9a4a" stroke-width="1"/>
-                <rect x="30" y="57" width="5" height="13" rx="2" fill="#6a5a4a" stroke="#eecd8a" stroke-width="1"/>
-                <text x="48" y="66" font-size="5" fill="#bb9a4a" text-anchor="middle">S686</text>
-            </svg>`;
-        }
-
-        // M249
-        if (name.includes('m249')) {
-            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="22" y="42" width="58" height="12" rx="2" fill="#4a5a3a" stroke="#aacc6a" stroke-width="1.2"/>
-                <rect x="70" y="44" width="8" height="8" rx="1" fill="#2a3a1a" stroke="#88aa4a" stroke-width="1"/>
-                <rect x="20" y="54" width="6" height="16" rx="2" fill="#5a6a4a" stroke="#bbdd8a" stroke-width="1"/>
-                <circle cx="50" cy="48" r="3" fill="#3a4a2a" stroke="#99bb5a" stroke-width="0.8"/>
-                <text x="48" y="66" font-size="5" fill="#88aa4a" text-anchor="middle">M249</text>
-            </svg>`;
-        }
-
-        // DP-28
-        if (name.includes('dp-28') || name.includes('dp')) {
-            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="27" y="44" width="48" height="10" rx="2" fill="#5a4a3a" stroke="#ccaa6a" stroke-width="1.2"/>
-                <circle cx="55" cy="49" r="9" fill="#3a2a1a" stroke="#bb8a4a" stroke-width="1.2"/>
-                <rect x="25" y="54" width="5" height="16" rx="2" fill="#6a5a4a" stroke="#ddbb7a" stroke-width="1"/>
-                <circle cx="55" cy="49" r="3" fill="#5a4a3a"/>
-                <text x="48" y="66" font-size="5" fill="#bb8a4a" text-anchor="middle">DP-28</text>
-            </svg>`;
-        }
-
-        // Deagle
-        if (name.includes('deagle')) {
-            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="38" y="47" width="38" height="10" rx="2" fill="#4a4a4a" stroke="#ccc" stroke-width="1.2"/>
-                <rect x="66" y="49" width="9" height="6" rx="1" fill="#2a2a2a" stroke="#999" stroke-width="1"/>
-                <rect x="36" y="57" width="4" height="10" rx="1" fill="#5a5a5a" stroke="#aaa" stroke-width="1"/>
-                <text x="52" y="65" font-size="4" fill="#999" text-anchor="middle">DEAGLE</text>
-            </svg>`;
-        }
-
-        // Glock
-        if (name.includes('glock')) {
-            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="40" y="49" width="36" height="8" rx="2" fill="#3a3a3a" stroke="#aaa" stroke-width="1.2"/>
-                <rect x="66" y="51" width="7" height="5" rx="1" fill="#1a1a1a" stroke="#777" stroke-width="1"/>
-                <rect x="38" y="57" width="4" height="8" rx="1" fill="#4a4a4a" stroke="#999" stroke-width="1"/>
-                <text x="53" y="63" font-size="4" fill="#888" text-anchor="middle">GLOCK</text>
-            </svg>`;
-        }
-
-        // Crossbow
-        if (name.includes('crossbow')) {
-            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <line x1="18" y1="50" x2="82" y2="50" stroke="#aa8a4a" stroke-width="3"/>
-                <path d="M28 40 L18 50 L28 60" stroke="#886a3a" stroke-width="2" fill="none"/>
-                <rect x="44" y="46" width="12" height="8" rx="2" fill="#6a4a2a" stroke="#ccaa6a" stroke-width="1"/>
-                <line x1="82" y1="50" x2="90" y2="50" stroke="#bb9944" stroke-width="1.5"/>
-                <text x="48" y="68" font-size="5" fill="#aa8a4a" text-anchor="middle">BOW</text>
-            </svg>`;
-        }
-
-        // Дефолт
-        return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="32" y="42" width="44" height="12" rx="2" fill="#5a5a5a" stroke="#bbb" stroke-width="1.2"/>
-            <rect x="66" y="44" width="10" height="8" rx="2" fill="#3a3a3a" stroke="#999" stroke-width="1"/>
-            <rect x="30" y="54" width="5" height="16" rx="2" fill="#6a5a4a" stroke="#ccaa7a" stroke-width="1"/>
-        </svg>`;
-    }
-
-    // СПИСОК ОРУЖИЯ (ground loot, все карты)
-    const weaponsList = [
-        { name: "M416", type: "Штурмовая винтовка" },
-        { name: "SCAR-L", type: "Штурмовая винтовка" },
-        { name: "AKM", type: "Штурмовая винтовка" },
-        { name: "Beryl M762", type: "Штурмовая винтовка" },
-        { name: "M16A4", type: "Штурмовая винтовка" },
-        { name: "ACE32", type: "Штурмовая винтовка" },
-        { name: "Kar98k", type: "Снайперская винтовка" },
-        { name: "M24", type: "Снайперская винтовка" },
-        { name: "Dragunov SVD", type: "Марксманская винтовка" },
-        { name: "Mini-14", type: "Марксманская винтовка" },
-        { name: "SLR", type: "Марксманская винтовка" },
-        { name: "UMP-45", type: "Пистолет-пулемёт" },
-        { name: "Vector", type: "Пистолет-пулемёт" },
-        { name: "MP5K", type: "Пистолет-пулемёт" },
-        { name: "PP-19 Bizon", type: "Пистолет-пулемёт" },
-        { name: "Tommy Gun", type: "Пистолет-пулемёт" },
-        { name: "DBS", type: "Дробовик" },
-        { name: "S12K", type: "Дробовик" },
-        { name: "S686", type: "Дробовик" },
-        { name: "M249", type: "Пулемёт" },
-        { name: "DP-28", type: "Пулемёт" },
-        { name: "Crossbow", type: "Арбалет" },
-        { name: "Deagle", type: "Пистолет" },
-        { name: "Glock 18C", type: "Пистолет" }
+    // СПИСОК ОРУЖИЯ (только ground loot, все карты)
+    const weapons = [
+        "M416", "SCAR-L", "AKM", "Beryl M762", "M16A4", "ACE32",
+        "Kar98k", "M24", "Dragunov SVD", "Mini-14", "SLR",
+        "UMP-45", "Vector", "MP5K", "PP-19 Bizon", "Tommy Gun",
+        "DBS", "S12K", "S686",
+        "M249", "DP-28",
+        "Crossbow", "Deagle", "Glock 18C", "P1911"
     ];
 
+    const weaponIcons = {
+        "M416": "🔫", "SCAR-L": "🔫", "AKM": "💥", "Beryl M762": "⚙️", "M16A4": "🎯", "ACE32": "🌍",
+        "Kar98k": "🎯", "M24": "💀", "Dragunov SVD": "🎖️", "Mini-14": "📏", "SLR": "🔊",
+        "UMP-45": "🛡️", "Vector": "🌀", "MP5K": "🔰", "PP-19 Bizon": "📀", "Tommy Gun": "🍂",
+        "DBS": "🐉", "S12K": "🔧", "S686": "🎲",
+        "M249": "⛓️", "DP-28": "📀",
+        "Crossbow": "🏹", "Deagle": "💪", "Glock 18C": "🔫", "P1911": "⚙️"
+    };
+
+    const weaponTypes = {
+        "M416": "Штурмовая винтовка", "SCAR-L": "Штурмовая винтовка", "AKM": "Штурмовая винтовка",
+        "Beryl M762": "Штурмовая винтовка", "M16A4": "Штурмовая винтовка", "ACE32": "Штурмовая винтовка",
+        "Kar98k": "Снайперская винтовка", "M24": "Снайперская винтовка", "Dragunov SVD": "Марксманская винтовка",
+        "Mini-14": "Марксманская винтовка", "SLR": "Марксманская винтовка",
+        "UMP-45": "Пистолет-пулемёт", "Vector": "Пистолет-пулемёт", "MP5K": "Пистолет-пулемёт",
+        "PP-19 Bizon": "Пистолет-пулемёт", "Tommy Gun": "Пистолет-пулемёт",
+        "DBS": "Дробовик", "S12K": "Дробовик", "S686": "Дробовик",
+        "M249": "Пулемёт", "DP-28": "Пулемёт",
+        "Crossbow": "Арбалет", "Deagle": "Пистолет", "Glock 18C": "Пистолет", "P1911": "Пистолет"
+    };
+
     function getRandomWeapon() {
-        const randomIndex = Math.floor(Math.random() * weaponsList.length);
-        return { ...weaponsList[randomIndex] };
+        return weapons[Math.floor(Math.random() * weapons.length)];
     }
 
-    function getTwoDistinctWeapons() {
-        let weaponA = getRandomWeapon();
-        let weaponB = getRandomWeapon();
-        let attempts = 0;
-        while (weaponA.name === weaponB.name && attempts < 6) {
-            weaponB = getRandomWeapon();
-            attempts++;
+    function getTwoWeapons() {
+        let w1 = getRandomWeapon();
+        let w2 = getRandomWeapon();
+        while (w1 === w2) {
+            w2 = getRandomWeapon();
         }
-        return [weaponA, weaponB];
+        return [w1, w2];
     }
 
-    const weaponName1 = document.getElementById('weaponName1');
-    const weaponIcon1 = document.getElementById('weaponIcon1');
-    const weaponType1 = document.getElementById('weaponType1');
-    const weaponName2 = document.getElementById('weaponName2');
-    const weaponIcon2 = document.getElementById('weaponIcon2');
-    const weaponType2 = document.getElementById('weaponType2');
-    const rollBtn = document.getElementById('rollBtn');
-    const slot1Div = document.getElementById('weaponSlot1');
-    const slot2Div = document.getElementById('weaponSlot2');
-
-    function updateWeaponDisplay(weapon, iconContainer, nameElem, typeElem) {
-        nameElem.innerText = weapon.name;
-        typeElem.innerText = weapon.type;
-        iconContainer.innerHTML = getWeaponSVG(weapon.name);
+    function animateSlot(slot) {
+        slot.classList.add('animate');
+        setTimeout(() => slot.classList.remove('animate'), 300);
     }
 
-    function animateSlot(slotElement) {
-        slotElement.classList.add('animate-weapon');
-        setTimeout(() => {
-            slotElement.classList.remove('animate-weapon');
-        }, 350);
+    function updateUI() {
+        const [w1, w2] = getTwoWeapons();
+        
+        document.getElementById('name1').innerText = w1;
+        document.getElementById('icon1').innerHTML = weaponIcons[w1] || "🔫";
+        document.getElementById('type1').innerText = weaponTypes[w1];
+        
+        document.getElementById('name2').innerText = w2;
+        document.getElementById('icon2').innerHTML = weaponIcons[w2] || "🔫";
+        document.getElementById('type2').innerText = weaponTypes[w2];
+        
+        animateSlot(document.getElementById('slot1'));
+        animateSlot(document.getElementById('slot2'));
     }
 
-    function updateWeapons() {
-        const [weaponObj1, weaponObj2] = getTwoDistinctWeapons();
-        updateWeaponDisplay(weaponObj1, weaponIcon1, weaponName1, weaponType1);
-        updateWeaponDisplay(weaponObj2, weaponIcon2, weaponName2, weaponType2);
-        animateSlot(slot1Div);
-        animateSlot(slot2Div);
-        rollBtn.style.transform = "scale(0.98)";
-        setTimeout(() => { rollBtn.style.transform = ""; }, 100);
-    }
-
-    function initRandomOnLoad() {
-        const [firstWeapon, secondWeapon] = getTwoDistinctWeapons();
-        updateWeaponDisplay(firstWeapon, weaponIcon1, weaponName1, weaponType1);
-        updateWeaponDisplay(secondWeapon, weaponIcon2, weaponName2, weaponType2);
-        setTimeout(() => {
-            animateSlot(slot1Div);
-            animateSlot(slot2Div);
-        }, 100);
-    }
-
-    rollBtn.addEventListener('click', () => {
-        updateWeapons();
-        rollBtn.style.boxShadow = "0 5px 0 #0f130b";
-        setTimeout(() => {
-            rollBtn.style.boxShadow = "0 8px 0 #0f130b";
-        }, 80);
-    });
-
-    initRandomOnLoad();
-
-    window.addEventListener('keydown', (e) => {
-        if (e.code === 'Space' && !e.repeat && document.activeElement !== rollBtn) {
-            e.preventDefault();
-            updateWeapons();
-            rollBtn.style.transform = "scale(0.96)";
-            setTimeout(() => { if(rollBtn) rollBtn.style.transform = ""; }, 120);
-        }
-    });
+    document.getElementById('rollBtn').addEventListener('click', updateUI);
+    
+    // Запуск при загрузке
+    updateUI();
 </script>
 </body>
 </html>
