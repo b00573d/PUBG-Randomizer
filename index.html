@@ -3,26 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>PUBG RANDOMIZER — честный рандомайзер оружия</title>
+    <title>PUBG RANDOMIZER — только наземный лут</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            user-select: none; /* чтобы не выделялся текст при кликах */
+            user-select: none;
         }
 
         body {
             min-height: 100vh;
             background: radial-gradient(circle at 20% 30%, #0f1a0e, #030603);
-            font-family: 'Segoe UI', 'Poppins', system-ui, -apple-system, 'Impact', sans-serif;
+            font-family: 'Segoe UI', 'Poppins', system-ui, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
         }
 
-        /* главная карточка */
         .card {
             max-width: 1100px;
             width: 100%;
@@ -33,10 +32,8 @@
             box-shadow: 0 30px 50px rgba(0, 0, 0, 0.7), inset 0 1px 2px rgba(255, 245, 180, 0.1);
             padding: 30px 25px 40px;
             text-align: center;
-            transition: 0.2s;
         }
 
-        /* заголовок со сковородками */
         .game-title {
             font-size: 2.5rem;
             font-weight: 800;
@@ -87,7 +84,6 @@
             color: #e9f5cf;
         }
 
-        /* панель двух слотов */
         .weapons-panel {
             display: flex;
             flex-wrap: wrap;
@@ -186,7 +182,6 @@
             margin-top: 12px;
         }
 
-        /* кнопка рандома */
         .randomize-btn {
             background: linear-gradient(145deg, #2c3e1f, #1a2812);
             border: none;
@@ -227,17 +222,9 @@
         }
 
         @keyframes popAnim {
-            0% {
-                transform: scale(0.85);
-                opacity: 0;
-            }
-            80% {
-                transform: scale(1.02);
-            }
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
+            0% { transform: scale(0.85); opacity: 0; }
+            80% { transform: scale(1.02); }
+            100% { transform: scale(1); opacity: 1; }
         }
 
         .animate-weapon {
@@ -251,23 +238,11 @@
         }
 
         @media (max-width: 700px) {
-            .card {
-                padding: 20px 16px;
-            }
-            .weapon-name {
-                font-size: 1.4rem;
-            }
-            .weapon-icon svg {
-                width: 65px;
-                height: 65px;
-            }
-            .randomize-btn {
-                font-size: 1.3rem;
-                padding: 12px 20px;
-            }
-            .game-title {
-                font-size: 1.9rem;
-            }
+            .card { padding: 20px 16px; }
+            .weapon-name { font-size: 1.4rem; }
+            .weapon-icon svg { width: 65px; height: 65px; }
+            .randomize-btn { font-size: 1.3rem; padding: 12px 20px; }
+            .game-title { font-size: 1.9rem; }
         }
     </style>
 </head>
@@ -302,17 +277,17 @@
 
     <button class="randomize-btn" id="rollBtn">🎲 ВЫБРАТЬ ОРУЖИЕ 🎲</button>
     <div class="reroll-hint">⚡ нажми, чтобы получить новый набор | только эти два до конца матча ⚡</div>
-    <footer>🔥 только наземный лут | без крэйтов и карточных эксклюзивов | актуально на июнь 2026</footer>
+    <footer>🔥 только наземный лут | нет крэйтов | актуально 2026</footer>
 </div>
 
 <script>
-    // --------------------------------------------------------------
-    // ФИНАЛЬНЫЙ СПИСОК ОРУЖИЯ (только универсальный ground loot)
-    // Убрано: Bizon, P1911, R45, DP-28, Mosin, QBU, K2, G36C, QBZ (карточные)
-    // Оставлены стволы, которые есть на всех картах в луте
-    // --------------------------------------------------------------
+    // ==============================================================
+    // ТОЛЬКО GROUND LOOT (НАЗЕМНЫЙ ЛУТ) | ВСЕ КАРТЫ
+    // Убраны: AWM, Mk14, FAMAS, MG3, P90, Lynx, O12 (крэйт/дроп)
+    // AUG A3 оставлен — он теперь обычный наземный лут
+    // ==============================================================
     const weaponsDB = [
-        // Штурмовые винтовки (везде)
+        // Штурмовые винтовки (наземный лут)
         { name: "M416", type: "Штурмовая винтовка", iconHint: "m4" },
         { name: "SCAR-L", type: "Штурмовая винтовка", iconHint: "scar" },
         { name: "AKM", type: "Штурмовая винтовка", iconHint: "akm" },
@@ -320,29 +295,26 @@
         { name: "M16A4", type: "Штурмовая винтовка", iconHint: "m16" },
         { name: "ACE32", type: "Штурмовая винтовка", iconHint: "ace" },
         { name: "AUG A3", type: "Штурмовая винтовка", iconHint: "aug" },
-        // Снайперские / марксманские
+        // Снайперские / марксманские (наземные)
         { name: "Kar98k", type: "Снайперская винтовка", iconHint: "kar98" },
         { name: "M24", type: "Снайперская винтовка", iconHint: "m24" },
         { name: "Dragunov SVD", type: "Марксманская винтовка", iconHint: "svd" },
         { name: "Mini-14", type: "Марксманская винтовка", iconHint: "mini" },
         { name: "SLR", type: "Марксманская винтовка", iconHint: "slr" },
         { name: "Mk12", type: "Марксманская винтовка", iconHint: "mk12" },
-        // Пистолеты-пулемёты
+        // Пистолеты-пулемёты (наземные)
         { name: "UMP-45", type: "Пистолет-пулемёт", iconHint: "ump" },
         { name: "Vector", type: "Пистолет-пулемёт", iconHint: "vector" },
         { name: "MP5K", type: "Пистолет-пулемёт", iconHint: "mp5k" },
         { name: "Tommy Gun", type: "Пистолет-пулемёт", iconHint: "tommy" },
         { name: "MP9", type: "Пистолет-пулемёт", iconHint: "mp9" },
-        { name: "P90", type: "Пистолет-пулемёт", iconHint: "p90" },
-        // Дробовики
+        // Дробовики (наземные)
         { name: "DBS", type: "Дробовик", iconHint: "dbs" },
         { name: "S12K", type: "Дробовик", iconHint: "s12k" },
         { name: "S686", type: "Дробовик", iconHint: "s686" },
-        { name: "O12", type: "Дробовик", iconHint: "o12" },
-        // Пулемёты
+        // Пулемёты (только наземные)
         { name: "M249", type: "Пулемёт", iconHint: "m249" },
-        { name: "MG3", type: "Пулемёт", iconHint: "mg3" },
-        // Прочее оружие (везде)
+        // Прочее оружие
         { name: "Crossbow", type: "Арбалет", iconHint: "crossbow" },
         { name: "Deagle", type: "Пистолет", iconHint: "deagle" },
         { name: "Glock 18C", type: "Пистолет", iconHint: "glock" },
@@ -350,10 +322,9 @@
         { name: "Win94", type: "Винтовка", iconHint: "win94" }
     ];
 
-    // Уникальные SVG-силуэты под каждый тип оружия (стилизовано, но читаемо)
     function getWeaponSVG(weapon) {
         const hint = weapon.iconHint || weapon.name.toLowerCase();
-        // Общие контуры для групп
+        
         if (hint === "m4" || weapon.name === "M416") {
             return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="28" y="38" width="52" height="14" rx="2" fill="#2d2d2d" stroke="#b0b0b0" stroke-width="1.2"/><rect x="34" y="33" width="8" height="5" fill="#3a3a3a" stroke="#888" stroke-width="0.8"/><rect x="70" y="40" width="12" height="10" rx="2" fill="#1a1a1a" stroke="#777" stroke-width="1"/><rect x="26" y="52" width="5" height="18" rx="2" fill="#4a3a2a" stroke="#c99f5c" stroke-width="1"/><text x="50" y="70" font-size="6" fill="#aaa" text-anchor="middle">M416</text></svg>`;
         }
@@ -384,8 +355,12 @@
         if (hint === "m249") {
             return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="42" width="58" height="13" rx="2" fill="#4e623c" stroke="#b8cf6a" stroke-width="1.2"/><rect x="70" y="44" width="8" height="9" rx="1" fill="#2e3e1e" stroke="#8fac4a" stroke-width="1"/><rect x="20" y="55" width="6" height="16" rx="2" fill="#5b7650" stroke="#d3ea88" stroke-width="1"/><text x="50" y="72" font-size="6" fill="#bdda6a" text-anchor="middle">M249</text></svg>`;
         }
-        // универсальный красивый силуэт по умолчанию
-        return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="30" y="42" width="46" height="13" rx="2" fill="#5a5a5a" stroke="#bcbcbc" stroke-width="1.2"/><rect x="66" y="44" width="10" height="9" rx="2" fill="#3a3a3a" stroke="#929292" stroke-width="1"/><rect x="28" y="55" width="5" height="16" rx="2" fill="#6a5e4a" stroke="#ddbb7a" stroke-width="1"/><text x="50" y="72" font-size="6" fill="#bcbcbc" text-anchor="middle">${weapon.name.substring(0, 5)}</text></svg>`;
+        if (hint === "win94") {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="43" width="54" height="10" rx="2" fill="#6b5a42" stroke="#dbba7a" stroke-width="1.2"/><rect x="66" y="40" width="12" height="16" rx="3" fill="#4a3a22" stroke="#bc9a52" stroke-width="1"/><rect x="20" y="53" width="5" height="16" rx="2" fill="#7b6a52" stroke="#eedaa0" stroke-width="1"/><text x="48" y="68" font-size="5" fill="#dbba7a" text-anchor="middle">WIN94</text></svg>`;
+        }
+        
+        // универсальный силуэт
+        return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="30" y="42" width="46" height="13" rx="2" fill="#5a5a5a" stroke="#bcbcbc" stroke-width="1.2"/><rect x="66" y="44" width="10" height="9" rx="2" fill="#3a3a3a" stroke="#929292" stroke-width="1"/><rect x="28" y="55" width="5" height="16" rx="2" fill="#6a5e4a" stroke="#ddbb7a" stroke-width="1"/><text x="50" y="72" font-size="5" fill="#bcbcbc" text-anchor="middle">${weapon.name.substring(0, 5)}</text></svg>`;
     }
 
     function getRandomWeapon() {
@@ -404,7 +379,6 @@
         return [a, b];
     }
 
-    // DOM elements
     const slot1 = document.getElementById('weaponSlot1');
     const slot2 = document.getElementById('weaponSlot2');
     const name1 = document.getElementById('weaponName1');
@@ -430,7 +404,6 @@
         icon2.innerHTML = getWeaponSVG(w2);
         animateSlot(slot1);
         animateSlot(slot2);
-        // кнопочный эффект
         rollBtn.style.transform = 'scale(0.97)';
         setTimeout(() => { rollBtn.style.transform = ''; }, 100);
     }
@@ -441,7 +414,6 @@
         setTimeout(() => { rollBtn.style.boxShadow = '0 8px 0 #0f130b'; }, 90);
     });
 
-    // инициализация при загрузке
     (function init() {
         const [first, second] = getTwoDistinctWeapons();
         name1.innerText = first.name;
@@ -456,7 +428,6 @@
         }, 100);
     })();
 
-    // поддержка клавиши ПРОБЕЛ для реролла
     window.addEventListener('keydown', (e) => {
         if (e.code === 'Space' && !e.repeat && document.activeElement !== rollBtn) {
             e.preventDefault();
