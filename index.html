@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>PUBG Рандомайзер | 2 пушки (только универсальное оружие)</title>
+    <title>PUBG Рандомайзер | Только наземный лут</title>
     <style>
         * {
             margin: 0;
@@ -23,7 +23,7 @@
         }
 
         .card {
-            max-width: 950px;
+            max-width: 1100px;
             width: 100%;
             background: rgba(10, 14, 8, 0.85);
             backdrop-filter: blur(4px);
@@ -31,7 +31,6 @@
             border: 2px solid rgba(210, 180, 70, 0.7);
             box-shadow: 0 25px 45px rgba(0, 0, 0, 0.6), inset 0 1px 2px rgba(255, 255, 200, 0.1);
             padding: 30px 25px 40px 25px;
-            transition: all 0.2s;
             text-align: center;
         }
 
@@ -69,6 +68,17 @@
             color: #e9f5cf;
         }
 
+        .badge-ground {
+            background: #6a3a2a;
+            display: inline-block;
+            font-size: 0.65rem;
+            padding: 2px 8px;
+            border-radius: 20px;
+            margin-left: 5px;
+            vertical-align: middle;
+            color: #ffccaa;
+        }
+
         .weapons-panel {
             display: flex;
             flex-wrap: wrap;
@@ -78,19 +88,38 @@
         }
 
         .weapon-slot {
-            background: #11170e;
+            background: linear-gradient(145deg, #0e130b, #080c06);
             border-radius: 32px;
-            padding: 20px 15px;
-            width: 260px;
-            min-width: 220px;
+            padding: 25px 15px;
+            width: 280px;
+            min-width: 250px;
             flex: 1;
             box-shadow: 0 12px 20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,200,0.1);
             border: 1px solid #4e6b2c;
-            transition: transform 0.2s ease;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .weapon-slot::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(210, 180, 70, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .weapon-slot:hover::before {
+            left: 100%;
         }
 
         .weapon-slot:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
+            border-color: #cfb053;
+            box-shadow: 0 20px 30px rgba(0,0,0,0.6);
         }
 
         .slot-label {
@@ -107,13 +136,26 @@
         }
 
         .weapon-icon {
-            font-size: 3.6rem;
-            margin: 10px 0;
-            filter: drop-shadow(2px 4px 6px black);
+            margin: 15px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+        }
+
+        .weapon-icon svg {
+            width: 85px;
+            height: 85px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+            transition: transform 0.2s;
+        }
+
+        .weapon-slot:hover .weapon-icon svg {
+            transform: scale(1.05);
         }
 
         .weapon-name {
-            font-size: 1.9rem;
+            font-size: 1.8rem;
             font-weight: 800;
             color: #f7f3da;
             text-shadow: 0 2px 0 #2f3e1c;
@@ -175,13 +217,13 @@
         }
 
         @keyframes pop {
-            0% { transform: scale(0.9); opacity: 0; }
+            0% { transform: scale(0.85); opacity: 0; }
             80% { transform: scale(1.02); }
             100% { transform: scale(1); opacity: 1; }
         }
 
         .animate-weapon {
-            animation: pop 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            animation: pop 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
         }
 
         footer {
@@ -190,12 +232,16 @@
             color: #6c6e4e;
         }
 
-        @media (max-width: 650px) {
+        @media (max-width: 700px) {
             .weapons-panel {
                 gap: 20px;
             }
             .weapon-name {
                 font-size: 1.4rem;
+            }
+            .weapon-icon svg {
+                width: 65px;
+                height: 65px;
             }
             .randomize-btn {
                 font-size: 1.3rem;
@@ -213,20 +259,21 @@
     <div class="game-title">
         🔫 PUBG ARMORY ROULETTE 
         <span class="badge-universal">🌍 все карты</span>
+        <span class="badge-ground">🎯 только ground loot</span>
     </div>
     <div class="sub">🎲 нажми — получи 2 пушки | играй только с ними 🎲</div>
 
     <div class="weapons-panel">
         <div class="weapon-slot" id="weaponSlot1">
             <div class="slot-label">🔫 ОСНОВНОЕ</div>
-            <div class="weapon-icon" id="weaponIcon1">🎯</div>
+            <div class="weapon-icon" id="weaponIcon1"></div>
             <div class="weapon-name" id="weaponName1">—</div>
             <div class="weapon-type" id="weaponType1">жду рандома</div>
         </div>
 
         <div class="weapon-slot" id="weaponSlot2">
             <div class="slot-label">🔪 ВТОРОЕ</div>
-            <div class="weapon-icon" id="weaponIcon2">⚡</div>
+            <div class="weapon-icon" id="weaponIcon2"></div>
             <div class="weapon-name" id="weaponName2">—</div>
             <div class="weapon-type" id="weaponType2">жду рандома</div>
         </div>
@@ -234,83 +281,328 @@
 
     <button class="randomize-btn" id="rollBtn">🎲 ВЫБРАТЬ ОРУЖИЕ 🎲</button>
     <div class="reroll-hint">⚡ нажми, чтобы получить новый набор | только эти два до конца матча ⚡</div>
-    <footer>🔥 строгий режим: выпало то, с чем играешь. Без Win94 / карточных эксклюзивов 🔥</footer>
+    <footer>🔥 только наземный лут | нет крэйтов, нет карточных эксклюзивов | Win94, Mosin, Skorpion — убраны 🔥</footer>
 </div>
 
 <script>
-    // --------------------------------------------------------------
-    // ТОЛЬКО УНИВЕРСАЛЬНОЕ ОРУЖИЕ PUBG (есть на всех основных картах)
-    // Убрано: Win94 (только Miramar), QBZ (Sanhok), G36C (Vikendi), 
-    // K2 (раньше эксклюзив), Lynx (редкий crate), O12 (дробовик с Deston)
-    // Оставлены только те, что гарантированно есть в Erangel, Miramar, Taego, Deston, Vikendi, Sanhok
-    // --------------------------------------------------------------
-    const universalWeapons = [
-        // Штурмовые винтовки (везде)
-        { name: "M416", icon: "🔫", type: "Штурмовая винтовка" },
-        { name: "SCAR-L", icon: "🎯", type: "Штурмовая винтовка" },
-        { name: "AKM", icon: "💥", type: "Штурмовая винтовка" },
-        { name: "Beryl M762", icon: "⚙️", type: "Штурмовая винтовка" },
-        { name: "M16A4", icon: "🔭", type: "Штурмовая винтовка" },
-        { name: "ACE32", icon: "🌍", type: "Штурмовая винтовка" },
-        { name: "AUG A3", icon: "🔥", type: "Штурмовая винтовка (дроп/круг)" },
-        { name: "FAMAS", icon: "🇫🇷", type: "Штурмовая винтовка (крэйт)" },
+    // ==============================================================
+    // ТОЛЬКО GROUND LOOT | ЕСТЬ НА ВСЕХ КАРТАХ
+    // Убрано: AWM, AUG, Mk14, P90, MG3, FAMAS (крэйт)
+    // Убрано: Win94, Mosin-Nagant, QBZ, G36C, K2, Skorpion (карточные эксклюзивы)
+    // P18C → Glock 18C
+    // ==============================================================
+
+    function getWeaponSVG(weaponName, type) {
+        const name = weaponName.toLowerCase();
         
-        // Снайперские / марксманские (везде)
-        { name: "Kar98k", icon: "🎯", type: "Снайперская винтовка" },
-        { name: "M24", icon: "💀", type: "Снайперская винтовка" },
-        { name: "AWM", icon: "⚡", type: "Снайперская винтовка (крэйт)" },
-        { name: "Mosin-Nagant", icon: "🌾", type: "Снайперская винтовка" },
-        { name: "Dragunov SVD", icon: "🎖️", type: "Марксманская винтовка" },
-        { name: "Mini-14", icon: "📏", type: "Марксманская винтовка" },
-        { name: "SLR", icon: "🔊", type: "Марксманская винтовка" },
-        { name: "Mk12", icon: "🌊", type: "Марксманская винтовка" },
-        { name: "Mk14 EBR", icon: "🎖️", type: "Марксманская винтовка (крэйт)" },
+        // Штурмовые винтовки
+        if (name.includes('m416') || name.includes('m4')) {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="25" y="35" width="55" height="18" rx="3" fill="#2d2d2d" stroke="#7a7a7a" stroke-width="1.5"/>
+                <rect x="30" y="30" width="8" height="5" fill="#3a3a3a" stroke="#6a6a6a" stroke-width="1"/>
+                <rect x="70" y="38" width="12" height="12" rx="2" fill="#1a1a1a" stroke="#5a5a5a" stroke-width="1"/>
+                <rect x="22" y="48" width="6" height="20" rx="2" fill="#4a3a2a" stroke="#8a7a5a" stroke-width="1"/>
+                <rect x="73" y="42" width="5" height="8" rx="1" fill="#555"/>
+                <circle cx="78" cy="46" r="3" fill="#333" stroke="#777" stroke-width="0.8"/>
+            </svg>`;
+        }
         
-        // Пистолеты-пулеметы (везде)
-        { name: "UMP-45", icon: "🛡️", type: "Пистолет-пулемёт" },
-        { name: "Vector", icon: "🌀", type: "Пистолет-пулемёт" },
-        { name: "MP5K", icon: "🔰", type: "Пистолет-пулемёт" },
-        { name: "PP-19 Bizon", icon: "📀", type: "Пистолет-пулемёт" },
-        { name: "Tommy Gun", icon: "🍂", type: "Пистолет-пулемёт" },
-        { name: "MP9", icon: "⚡", type: "Пистолет-пулемёт" },
-        { name: "P90", icon: "💠", type: "Пистолет-пулемёт (крэйт)" },
+        if (name.includes('akm')) {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="22" y="38" width="52" height="16" rx="2" fill="#3a3025" stroke="#8a7a5a" stroke-width="1.5"/>
+                <rect x="28" y="32" width="10" height="6" fill="#2a2218" stroke="#6a5a3a" stroke-width="1"/>
+                <rect x="65" y="40" width="14" height="12" rx="2" fill="#1a1510" stroke="#5a4a2a" stroke-width="1"/>
+                <path d="M20 50 L18 70 L26 70 L24 50 Z" fill="#5a4a2a" stroke="#9a8a5a" stroke-width="1"/>
+                <rect x="70" y="43" width="6" height="6" rx="1" fill="#444"/>
+                <line x1="25" y1="54" x2="25" y2="65" stroke="#8a7a5a" stroke-width="2"/>
+            </svg>`;
+        }
         
-        // Дробовики (везде)
-        { name: "DBS", icon: "🐉", type: "Дробовик" },
-        { name: "S12K", icon: "🔧", type: "Дробовик" },
-        { name: "S686", icon: "🎲", type: "Дробовик" },
+        if (name.includes('scar')) {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="24" y="37" width="54" height="16" rx="3" fill="#4a4535" stroke="#9a8a6a" stroke-width="1.5"/>
+                <rect x="32" y="31" width="7" height="6" fill="#3a3525" stroke="#7a6a4a" stroke-width="1"/>
+                <rect x="68" y="39" width="13" height="12" rx="2" fill="#2a2520" stroke="#6a5a3a" stroke-width="1"/>
+                <rect x="21" y="47" width="6" height="22" rx="2" fill="#5a4a3a" stroke="#9a8a6a" stroke-width="1"/>
+                <rect x="72" y="42" width="5" height="6" rx="1" fill="#555"/>
+            </svg>`;
+        }
+
+        if (name.includes('beryl')) {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="23" y="36" width="53" height="17" rx="3" fill="#3a3530" stroke="#8a7a6a" stroke-width="1.5"/>
+                <rect x="29" y="31" width="8" height="5" fill="#2a2520" stroke="#6a5a4a" stroke-width="1"/>
+                <rect x="66" y="39" width="14" height="11" rx="2" fill="#1a1512" stroke="#5a4a3a" stroke-width="1"/>
+                <rect x="20" y="47" width="6" height="22" rx="2" fill="#5a4a3a" stroke="#9a8a6a" stroke-width="1"/>
+            </svg>`;
+        }
+
+        if (name.includes('m16')) {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="27" y="38" width="50" height="15" rx="2" fill="#3a3a3a" stroke="#7a7a7a" stroke-width="1.5"/>
+                <rect x="32" y="33" width="7" height="5" fill="#2a2a2a" stroke="#5a5a5a" stroke-width="1"/>
+                <rect x="68" y="40" width="10" height="11" rx="2" fill="#1a1a1a" stroke="#4a4a4a" stroke-width="1"/>
+                <rect x="25" y="53" width="5" height="18" rx="2" fill="#4a4a4a" stroke="#8a8a8a" stroke-width="1"/>
+            </svg>`;
+        }
+
+        if (name.includes('ace32')) {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="24" y="37" width="52" height="16" rx="3" fill="#4a3a2a" stroke="#9a8a5a" stroke-width="1.5"/>
+                <rect x="30" y="32" width="9" height="5" fill="#3a2a1a" stroke="#7a6a3a" stroke-width="1"/>
+                <rect x="67" y="40" width="12" height="10" rx="2" fill="#2a1a0a" stroke="#6a5a2a" stroke-width="1"/>
+                <rect x="22" y="48" width="5" height="21" rx="2" fill="#5a4a3a" stroke="#aa8a5a" stroke-width="1"/>
+            </svg>`;
+        }
+
+        // Снайперские винтовки (только наземные: Kar98k, M24, SVD, Mini, SLR, Mk12)
+        if (name.includes('kar98k') || name.includes('kar')) {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="20" y="40" width="58" height="12" rx="2" fill="#5a4a3a" stroke="#b89a6a" stroke-width="1.5"/>
+                <rect x="70" y="37" width="14" height="18" rx="3" fill="#3a2a1a" stroke="#8a6a4a" stroke-width="1.5"/>
+                <ellipse cx="48" cy="46" rx="8" ry="6" fill="#2a2015" stroke="#7a6a4a" stroke-width="1"/>
+                <rect x="18" y="52" width="5" height="20" rx="2" fill="#6a5a4a" stroke="#aa9a7a" stroke-width="1"/>
+                <line x1="78" y1="46" x2="88" y2="46" stroke="#aaa" stroke-width="2"/>
+            </svg>`;
+        }
         
-        // Пулеметы (везде)
-        { name: "M249", icon: "⛓️", type: "Пулемёт" },
-        { name: "DP-28", icon: "📀", type: "Пулемёт" },
-        { name: "MG3", icon: "🌀", type: "Пулемёт (крэйт)" },
+        if (name.includes('m24')) {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="18" y="41" width="60" height="11" rx="2" fill="#4a5a4a" stroke="#9aaa7a" stroke-width="1.5"/>
+                <rect x="68" y="38" width="15" height="17" rx="3" fill="#2a3a2a" stroke="#7a9a5a" stroke-width="1.5"/>
+                <rect x="16" y="52" width="5" height="18" rx="2" fill="#5a6a5a" stroke="#9aaa7a" stroke-width="1"/>
+                <rect x="72" y="44" width="6" height="5" rx="1" fill="#444"/>
+            </svg>`;
+        }
+
+        if (name.includes('svd') || name.includes('dragunov')) {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="21" y="40" width="56" height="13" rx="2" fill="#5a5a4a" stroke="#aaaa7a" stroke-width="1.5"/>
+                <rect x="67" y="38" width="14" height="17" rx="3" fill="#3a3a2a" stroke="#8a8a5a" stroke-width="1.5"/>
+                <rect x="19" y="53" width="5" height="19" rx="2" fill="#6a6a5a" stroke="#baba8a" stroke-width="1"/>
+                <line x1="75" y1="47" x2="85" y2="47" stroke="#bbb" stroke-width="1.5"/>
+            </svg>`;
+        }
+
+        if (name.includes('mini-14') || name.includes('mini')) {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="25" y="42" width="52" height="11" rx="2" fill="#4a4a4a" stroke="#8a8a8a" stroke-width="1.5"/>
+                <rect x="65" y="39" width="12" height="17" rx="2" fill="#2a2a2a" stroke="#6a6a6a" stroke-width="1.5"/>
+                <rect x="23" y="53" width="5" height="17" rx="2" fill="#5a5a5a" stroke="#9a9a9a" stroke-width="1"/>
+            </svg>`;
+        }
+
+        if (name.includes('slr')) {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="22" y="39" width="55" height="14" rx="2" fill="#5a4a3a" stroke="#ba9a6a" stroke-width="1.5"/>
+                <rect x="66" y="37" width="14" height="18" rx="3" fill="#3a2a1a" stroke="#9a7a4a" stroke-width="1.5"/>
+                <rect x="20" y="53" width="5" height="19" rx="2" fill="#6a5a4a" stroke="#caaa7a" stroke-width="1"/>
+            </svg>`;
+        }
+
+        if (name.includes('mk12')) {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="24" y="41" width="54" height="12" rx="2" fill="#4a5a5a" stroke="#8aaaaa" stroke-width="1.5"/>
+                <rect x="68" y="39" width="12" height="16" rx="2" fill="#2a3a3a" stroke="#6a8a8a" stroke-width="1.5"/>
+                <rect x="22" y="53" width="5" height="18" rx="2" fill="#5a6a6a" stroke="#9ababa" stroke-width="1"/>
+            </svg>`;
+        }
+
+        // Пистолеты-пулеметы (UMP, Vector, MP5K, Bizon, Tommy Gun, MP9)
+        if (name.includes('ump')) {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="30" y="42" width="48" height="14" rx="2" fill="#3a3a3a" stroke="#7a7a7a" stroke-width="1.5"/>
+                <rect x="35" y="38" width="6" height="4" fill="#2a2a2a"/>
+                <rect x="68" y="44" width="12" height="10" rx="2" fill="#1a1a1a" stroke="#5a5a5a" stroke-width="1"/>
+                <rect x="28" y="50" width="5" height="18" rx="2" fill="#5a4a3a" stroke="#9a8a6a" stroke-width="1"/>
+                <rect x="72" y="46" width="5" height="6" rx="1" fill="#444"/>
+            </svg>`;
+        }
         
-        // Арбалет + пистолеты (универсальные)
-        { name: "Crossbow", icon: "🏹", type: "Арбалет" },
-        { name: "Deagle", icon: "💪", type: "Пистолет .45" },
-        { name: "P18C", icon: "🔫", type: "Автоматический пистолет" },
-        { name: "P1911", icon: "⚙️", type: "Пистолет" },
-        { name: "R1895", icon: "💥", type: "Револьвер" },
-        { name: "Skorpion", icon: "⚡", type: "Пистолет-пулемёт (пистолет)" }
-    ];
-    
-    // Дополнительно добавим Win94 НЕТ! убрали навсегда, но для полноты удалим и карточный K2, QBZ и G36C отсутствуют.
-    // Убедимся, что список полностью кроссплатформенный: DBS есть везде, MP9 в Deston? MP9 сейчас на многих картах.
-    // Используем финальный список
-    
-    // Для разнообразия продублируем редкие варианты, но без привязки к картам
-    const finalWeaponList = [...universalWeapons];
-    
-    // Дополнительно добавим одно-два оружия, которые реально везде: 
-    // Можем еще добавить Winchester? НЕТ. только то, что точно на всех картах.
-    // Готово
-    
-    function getRandomWeapon() {
-        const randomIndex = Math.floor(Math.random() * finalWeaponList.length);
-        return { ...finalWeaponList[randomIndex] };
+        if (name.includes('vector')) {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="28" y="43" width="50" height="12" rx="2" fill="#4a4540" stroke="#8a7a70" stroke-width="1.5"/>
+                <rect x="68" y="45" width="10" height="8" rx="1" fill="#2a2a2a" stroke="#6a6a6a" stroke-width="1"/>
+                <rect x="26" y="55" width="4" height="15" rx="2" fill="#5a4a3a" stroke="#9a8a6a" stroke-width="1"/>
+                <rect x="33" y="39" width="5" height="4" fill="#3a3a3a"/>
+            </svg>`;
+        }
+
+        if (name.includes('mp5k')) {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="29" y="41" width="49" height="13" rx="2" fill="#3a4a3a" stroke="#7a9a6a" stroke-width="1.5"/>
+                <rect x="68" y="43" width="11" height="9" rx="1" fill="#2a3a2a" stroke="#6a8a5a" stroke-width="1"/>
+                <rect x="27" y="54" width="5" height="16" rx="2" fill="#5a6a4a" stroke="#9aba7a" stroke-width="1"/>
+            </svg>`;
+        }
+
+        if (name.includes('bizon')) {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="30" y="44" width="45" height="12" rx="2" fill="#4a4a4a" stroke="#8a8a8a" stroke-width="1.5"/>
+                <circle cx="55" cy="50" r="10" fill="#3a3a3a" stroke="#7a7a7a" stroke-width="1.5"/>
+                <rect x="28" y="56" width="5" height="14" rx="2" fill="#5a5a5a" stroke="#9a9a9a" stroke-width="1"/>
+            </svg>`;
+        }
+
+        if (name.includes('tommy')) {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="26" y="41" width="52" height="14" rx="2" fill="#5a4a3a" stroke="#ba9a6a" stroke-width="1.5"/>
+                <circle cx="50" cy="48" r="8" fill="#3a2a1a" stroke="#9a7a4a" stroke-width="1"/>
+                <rect x="24" y="55" width="5" height="18" rx="2" fill="#6a5a4a" stroke="#caaa7a" stroke-width="1"/>
+            </svg>`;
+        }
+
+        if (name.includes('mp9')) {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="31" y="42" width="46" height="13" rx="2" fill="#3a3a3a" stroke="#7a7a7a" stroke-width="1.5"/>
+                <rect x="67" y="44" width="10" height="9" rx="1" fill="#1a1a1a" stroke="#5a5a5a" stroke-width="1"/>
+                <rect x="29" y="55" width="4" height="15" rx="2" fill="#5a4a3a" stroke="#9a8a6a" stroke-width="1"/>
+            </svg>`;
+        }
+
+        // Дробовики
+        if (name.includes('dbs')) {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="25" y="39" width="45" height="20" rx="3" fill="#4a3a2a" stroke="#ba9a6a" stroke-width="1.5"/>
+                <rect x="60" y="42" width="12" height="14" rx="2" fill="#2a1a0a" stroke="#8a6a3a" stroke-width="1"/>
+                <rect x="68" y="45" width="4" height="8" rx="1" fill="#555"/>
+                <rect x="23" y="52" width="6" height="18" rx="2" fill="#6a5a4a" stroke="#ba9a7a" stroke-width="1"/>
+            </svg>`;
+        }
+        
+        if (name.includes('s12k')) {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="27" y="38" width="48" height="18" rx="3" fill="#5a4a3a" stroke="#ba9a6a" stroke-width="1.5"/>
+                <rect x="65" y="41" width="12" height="12" rx="2" fill="#3a2a1a" stroke="#8a6a3a" stroke-width="1"/>
+                <rect x="25" y="56" width="5" height="16" rx="2" fill="#6a5a4a" stroke="#caaa7a" stroke-width="1"/>
+                <rect x="30" y="34" width="6" height="4" fill="#4a3a2a"/>
+            </svg>`;
+        }
+
+        if (name.includes('s686')) {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="30" y="41" width="42" height="16" rx="2" fill="#5a4a3a" stroke="#caaa7a" stroke-width="1.5"/>
+                <rect x="62" y="44" width="10" height="10" rx="2" fill="#3a2a1a" stroke="#9a7a4a" stroke-width="1"/>
+                <rect x="28" y="57" width="5" height="15" rx="2" fill="#6a5a4a" stroke="#ba9a6a" stroke-width="1"/>
+            </svg>`;
+        }
+
+        // Пулеметы (M249, DP-28 — наземные)
+        if (name.includes('m249')) {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="20" y="40" width="60" height="14" rx="2" fill="#4a5a3a" stroke="#9aba6a" stroke-width="1.5"/>
+                <rect x="70" y="42" width="8" height="10" rx="1" fill="#2a3a1a" stroke="#6a9a3a" stroke-width="1"/>
+                <rect x="18" y="54" width="6" height="18" rx="2" fill="#5a6a4a" stroke="#aaba7a" stroke-width="1"/>
+                <circle cx="50" cy="47" r="4" fill="#3a4a2a" stroke="#8aaa5a" stroke-width="0.8"/>
+            </svg>`;
+        }
+
+        if (name.includes('dp-28') || name.includes('dp')) {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="25" y="42" width="50" height="12" rx="2" fill="#5a4a3a" stroke="#ba9a6a" stroke-width="1.5"/>
+                <circle cx="55" cy="48" r="10" fill="#3a2a1a" stroke="#9a7a4a" stroke-width="1.5"/>
+                <rect x="23" y="54" width="5" height="18" rx="2" fill="#6a5a4a" stroke="#ba9a6a" stroke-width="1"/>
+                <circle cx="55" cy="48" r="4" fill="#5a4a3a"/>
+            </svg>`;
+        }
+
+        // Арбалет + пистолеты
+        if (name.includes('crossbow')) {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 50 L80 50" stroke="#8a6a3a" stroke-width="3"/>
+                <path d="M30 40 L20 50 L30 60" stroke="#6a4a2a" stroke-width="2" fill="none"/>
+                <rect x="45" y="46" width="10" height="8" rx="2" fill="#5a4a2a" stroke="#aa8a5a" stroke-width="1"/>
+                <line x1="80" y1="50" x2="90" y2="50" stroke="#aaa" stroke-width="1.5"/>
+            </svg>`;
+        }
+
+        if (name.includes('deagle')) {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="35" y="45" width="40" height="12" rx="2" fill="#4a4a4a" stroke="#aaa" stroke-width="1.5"/>
+                <rect x="65" y="47" width="10" height="8" rx="1" fill="#2a2a2a" stroke="#777" stroke-width="1"/>
+                <rect x="33" y="57" width="4" height="12" rx="1" fill="#5a5a5a" stroke="#9a9a9a" stroke-width="1"/>
+            </svg>`;
+        }
+
+        if (name.includes('glock') || name.includes('p18c')) {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="38" y="47" width="38" height="10" rx="2" fill="#3a3a3a" stroke="#8a8a8a" stroke-width="1.5"/>
+                <rect x="66" y="49" width="8" height="6" rx="1" fill="#1a1a1a" stroke="#5a5a5a" stroke-width="1"/>
+                <rect x="36" y="57" width="4" height="10" rx="1" fill="#4a4a4a" stroke="#7a7a7a" stroke-width="1"/>
+            </svg>`;
+        }
+
+        if (name.includes('1911')) {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="36" y="46" width="39" height="11" rx="2" fill="#5a5a5a" stroke="#aaa" stroke-width="1.5"/>
+                <rect x="65" y="48" width="9" height="7" rx="1" fill="#3a3a3a" stroke="#777" stroke-width="1"/>
+                <rect x="34" y="57" width="4" height="11" rx="1" fill="#6a6a6a" stroke="#9a9a9a" stroke-width="1"/>
+            </svg>`;
+        }
+
+        if (name.includes('r1895')) {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="40" y="47" width="34" height="10" rx="3" fill="#5a4a3a" stroke="#caaa7a" stroke-width="1.5"/>
+                <circle cx="52" cy="52" r="5" fill="#3a2a1a" stroke="#aa8a5a" stroke-width="1"/>
+                <rect x="38" y="57" width="4" height="10" rx="1" fill="#6a5a4a" stroke="#ba9a7a" stroke-width="1"/>
+            </svg>`;
+        }
+
+        // Дефолтная иконка
+        return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="30" y="40" width="45" height="14" rx="2" fill="#5a5a5a" stroke="#aaa" stroke-width="1.5"/>
+            <rect x="65" y="42" width="10" height="10" rx="2" fill="#3a3a3a" stroke="#777" stroke-width="1"/>
+            <rect x="28" y="54" width="5" height="18" rx="2" fill="#6a5a4a" stroke="#ba9a6a" stroke-width="1"/>
+            <rect x="28" y="44" width="4" height="6" fill="#4a4a4a"/>
+        </svg>`;
     }
-    
-    // функция для двух разных пушек (если одинаковые редки, но сделаем рерол второго)
+
+    // --------------------------------------------------------------
+    // ФИНАЛЬНЫЙ СПИСОК ОРУЖИЯ (ТОЛЬКО GROUND LOOT + ЕСТЬ ВЕЗДЕ)
+    // --------------------------------------------------------------
+    const weaponsList = [
+        // Штурмовые винтовки
+        { name: "M416", type: "Штурмовая винтовка" },
+        { name: "SCAR-L", type: "Штурмовая винтовка" },
+        { name: "AKM", type: "Штурмовая винтовка" },
+        { name: "Beryl M762", type: "Штурмовая винтовка" },
+        { name: "M16A4", type: "Штурмовая винтовка" },
+        { name: "ACE32", type: "Штурмовая винтовка" },
+        // Снайперские/марксманские
+        { name: "Kar98k", type: "Снайперская винтовка" },
+        { name: "M24", type: "Снайперская винтовка" },
+        { name: "Dragunov SVD", type: "Марксманская винтовка" },
+        { name: "Mini-14", type: "Марксманская винтовка" },
+        { name: "SLR", type: "Марксманская винтовка" },
+        { name: "Mk12", type: "Марксманская винтовка" },
+        // Пистолеты-пулеметы
+        { name: "UMP-45", type: "Пистолет-пулемёт" },
+        { name: "Vector", type: "Пистолет-пулемёт" },
+        { name: "MP5K", type: "Пистолет-пулемёт" },
+        { name: "PP-19 Bizon", type: "Пистолет-пулемёт" },
+        { name: "Tommy Gun", type: "Пистолет-пулемёт" },
+        { name: "MP9", type: "Пистолет-пулемёт" },
+        // Дробовики
+        { name: "DBS", type: "Дробовик" },
+        { name: "S12K", type: "Дробовик" },
+        { name: "S686", type: "Дробовик" },
+        // Пулеметы
+        { name: "M249", type: "Пулемёт" },
+        { name: "DP-28", type: "Пулемёт" },
+        // Арбалет
+        { name: "Crossbow", type: "Арбалет" },
+        // Пистолеты
+        { name: "Deagle", type: "Пистолет" },
+        { name: "Glock 18C", type: "Пистолет" },
+        { name: "P1911", type: "Пистолет" },
+        { name: "R1895", type: "Револьвер" }
+    ];
+
+    function getRandomWeapon() {
+        const randomIndex = Math.floor(Math.random() * weaponsList.length);
+        return { ...weaponsList[randomIndex] };
+    }
+
     function getTwoDistinctWeapons() {
         let weaponA = getRandomWeapon();
         let weaponB = getRandomWeapon();
@@ -321,7 +613,7 @@
         }
         return [weaponA, weaponB];
     }
-    
+
     // DOM элементы
     const weaponName1 = document.getElementById('weaponName1');
     const weaponIcon1 = document.getElementById('weaponIcon1');
@@ -332,24 +624,26 @@
     const rollBtn = document.getElementById('rollBtn');
     const slot1Div = document.getElementById('weaponSlot1');
     const slot2Div = document.getElementById('weaponSlot2');
-    
+
+    function updateWeaponDisplay(weapon, iconContainer, nameElem, typeElem) {
+        nameElem.innerText = weapon.name;
+        typeElem.innerText = weapon.type;
+        const svgHtml = getWeaponSVG(weapon.name, weapon.type);
+        iconContainer.innerHTML = svgHtml;
+    }
+
     function animateSlot(slotElement) {
         slotElement.classList.add('animate-weapon');
         setTimeout(() => {
             slotElement.classList.remove('animate-weapon');
-        }, 300);
+        }, 350);
     }
-    
+
     function updateWeapons() {
         const [weaponObj1, weaponObj2] = getTwoDistinctWeapons();
         
-        weaponName1.innerText = weaponObj1.name;
-        weaponIcon1.innerText = weaponObj1.icon;
-        weaponType1.innerText = weaponObj1.type;
-        
-        weaponName2.innerText = weaponObj2.name;
-        weaponIcon2.innerText = weaponObj2.icon;
-        weaponType2.innerText = weaponObj2.type;
+        updateWeaponDisplay(weaponObj1, weaponIcon1, weaponName1, weaponType1);
+        updateWeaponDisplay(weaponObj2, weaponIcon2, weaponName2, weaponType2);
         
         animateSlot(slot1Div);
         animateSlot(slot2Div);
@@ -357,23 +651,18 @@
         rollBtn.style.transform = "scale(0.98)";
         setTimeout(() => { rollBtn.style.transform = ""; }, 100);
     }
-    
+
     function initRandomOnLoad() {
         const [firstWeapon, secondWeapon] = getTwoDistinctWeapons();
-        weaponName1.innerText = firstWeapon.name;
-        weaponIcon1.innerText = firstWeapon.icon;
-        weaponType1.innerText = firstWeapon.type;
-        
-        weaponName2.innerText = secondWeapon.name;
-        weaponIcon2.innerText = secondWeapon.icon;
-        weaponType2.innerText = secondWeapon.type;
+        updateWeaponDisplay(firstWeapon, weaponIcon1, weaponName1, weaponType1);
+        updateWeaponDisplay(secondWeapon, weaponIcon2, weaponName2, weaponType2);
         
         setTimeout(() => {
             animateSlot(slot1Div);
             animateSlot(slot2Div);
         }, 100);
     }
-    
+
     rollBtn.addEventListener('click', () => {
         updateWeapons();
         rollBtn.style.boxShadow = "0 5px 0 #0f130b";
@@ -381,9 +670,9 @@
             rollBtn.style.boxShadow = "0 8px 0 #0f130b";
         }, 80);
     });
-    
+
     initRandomOnLoad();
-    
+
     window.addEventListener('keydown', (e) => {
         if (e.code === 'Space' && !e.repeat && document.activeElement !== rollBtn) {
             e.preventDefault();
@@ -392,19 +681,6 @@
             setTimeout(() => { if(rollBtn) rollBtn.style.transform = ""; }, 120);
         }
     });
-    
-    const slots = [slot1Div, slot2Div];
-    slots.forEach(slot => {
-        slot.addEventListener('mouseenter', () => {
-            slot.style.borderColor = "#cfb053";
-            slot.style.transition = "0.2s";
-        });
-        slot.addEventListener('mouseleave', () => {
-            slot.style.borderColor = "#4e6b2c";
-        });
-    });
-    
-    console.log("✅ PUBG рандомайзер без Win94 и карточных эксклюзивов. Только универсальное оружие!");
 </script>
 </body>
 </html>
