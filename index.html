@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>PUBG Рандомайзер | Только наземный лут</title>
+    <title>PUBG RANDOMIZER</title>
     <style>
         * {
             margin: 0;
@@ -35,9 +35,9 @@
         }
 
         .game-title {
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             font-weight: 800;
-            letter-spacing: 3px;
+            letter-spacing: 4px;
             background: linear-gradient(135deg, #f5e56b, #c9a03d);
             -webkit-background-clip: text;
             background-clip: text;
@@ -45,6 +45,16 @@
             text-shadow: 0 2px 3px rgba(0,0,0,0.4);
             margin-bottom: 10px;
             text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .pan-icon {
+            font-size: 2.2rem;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+            transform: rotate(-15deg);
         }
 
         .sub {
@@ -250,6 +260,9 @@
             .card {
                 padding: 20px 16px;
             }
+            .game-title {
+                font-size: 1.8rem;
+            }
         }
     </style>
 </head>
@@ -257,22 +270,26 @@
 
 <div class="card">
     <div class="game-title">
-        🔫 PUBG ARMORY ROULETTE 
-        <span class="badge-universal">🌍 все карты</span>
-        <span class="badge-ground">🎯 только ground loot</span>
+        <span class="pan-icon">🍳</span>
+        PUBG RANDOMIZER
+        <span class="pan-icon" style="transform: rotate(15deg);">🍳</span>
     </div>
-    <div class="sub">🎲 нажми — получи 2 пушки | играй только с ними 🎲</div>
+    <div class="sub">
+        🎲 нажми — получи 2 пушки | играй только с ними 🎲
+        <span class="badge-universal">🌍 все карты</span>
+        <span class="badge-ground">🎯 ground loot</span>
+    </div>
 
     <div class="weapons-panel">
         <div class="weapon-slot" id="weaponSlot1">
-            <div class="slot-label">🔫 ОСНОВНОЕ</div>
+            <div class="slot-label">ОСНОВНОЕ</div>
             <div class="weapon-icon" id="weaponIcon1"></div>
             <div class="weapon-name" id="weaponName1">—</div>
             <div class="weapon-type" id="weaponType1">жду рандома</div>
         </div>
 
         <div class="weapon-slot" id="weaponSlot2">
-            <div class="slot-label">🔪 ВТОРОЕ</div>
+            <div class="slot-label">ВТОРОЕ</div>
             <div class="weapon-icon" id="weaponIcon2"></div>
             <div class="weapon-name" id="weaponName2">—</div>
             <div class="weapon-type" id="weaponType2">жду рандома</div>
@@ -281,406 +298,259 @@
 
     <button class="randomize-btn" id="rollBtn">🎲 ВЫБРАТЬ ОРУЖИЕ 🎲</button>
     <div class="reroll-hint">⚡ нажми, чтобы получить новый набор | только эти два до конца матча ⚡</div>
-    <footer>🔥 только наземный лут | нет крэйтов, нет карточных эксклюзивов | Win94, Mosin, Skorpion — убраны 🔥</footer>
+    <footer>🔥 только наземный лут | нет крэйтов, нет карточных эксклюзивов 🔥</footer>
 </div>
 
 <script>
     // ==============================================================
-    // ТОЛЬКО GROUND LOOT | ЕСТЬ НА ВСЕХ КАРТАХ
-    // Убрано: AWM, AUG, Mk14, P90, MG3, FAMAS (крэйт)
-    // Убрано: Win94, Mosin-Nagant, QBZ, G36C, K2, Skorpion (карточные эксклюзивы)
-    // P18C → Glock 18C
+    // PUBG RANDOMIZER - ТОЛЬКО GROUND LOOT | ВСЕ КАРТЫ
     // ==============================================================
 
-    function getWeaponSVG(weaponName, type) {
+    function getWeaponSVG(weaponName) {
         const name = weaponName.toLowerCase();
         
-        // Штурмовые винтовки
-        if (name.includes('m416') || name.includes('m4')) {
+        // M416
+        if (name.includes('m416')) {
             return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="25" y="35" width="55" height="18" rx="3" fill="#2d2d2d" stroke="#7a7a7a" stroke-width="1.5"/>
-                <rect x="30" y="30" width="8" height="5" fill="#3a3a3a" stroke="#6a6a6a" stroke-width="1"/>
-                <rect x="70" y="38" width="12" height="12" rx="2" fill="#1a1a1a" stroke="#5a5a5a" stroke-width="1"/>
-                <rect x="22" y="48" width="6" height="20" rx="2" fill="#4a3a2a" stroke="#8a7a5a" stroke-width="1"/>
-                <rect x="73" y="42" width="5" height="8" rx="1" fill="#555"/>
-                <circle cx="78" cy="46" r="3" fill="#333" stroke="#777" stroke-width="0.8"/>
+                <rect x="30" y="38" width="50" height="14" rx="2" fill="#2d2d2d" stroke="#9a9a9a" stroke-width="1.2"/>
+                <rect x="36" y="33" width="8" height="5" fill="#3a3a3a" stroke="#777" stroke-width="0.8"/>
+                <rect x="70" y="40" width="12" height="10" rx="2" fill="#1a1a1a" stroke="#666" stroke-width="1"/>
+                <rect x="28" y="52" width="5" height="18" rx="2" fill="#4a3a2a" stroke="#aa8a5a" stroke-width="1"/>
+                <rect x="74" y="43" width="4" height="4" rx="1" fill="#555"/>
+                <text x="48" y="65" font-size="6" fill="#666" text-anchor="middle">M416</text>
             </svg>`;
         }
         
+        // AKM
         if (name.includes('akm')) {
             return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="22" y="38" width="52" height="16" rx="2" fill="#3a3025" stroke="#8a7a5a" stroke-width="1.5"/>
-                <rect x="28" y="32" width="10" height="6" fill="#2a2218" stroke="#6a5a3a" stroke-width="1"/>
-                <rect x="65" y="40" width="14" height="12" rx="2" fill="#1a1510" stroke="#5a4a2a" stroke-width="1"/>
-                <path d="M20 50 L18 70 L26 70 L24 50 Z" fill="#5a4a2a" stroke="#9a8a5a" stroke-width="1"/>
-                <rect x="70" y="43" width="6" height="6" rx="1" fill="#444"/>
-                <line x1="25" y1="54" x2="25" y2="65" stroke="#8a7a5a" stroke-width="2"/>
+                <rect x="28" y="40" width="48" height="14" rx="2" fill="#3a3025" stroke="#aa8a5a" stroke-width="1.2"/>
+                <rect x="33" y="35" width="10" height="5" fill="#2a2218" stroke="#886a3a" stroke-width="0.8"/>
+                <rect x="66" y="42" width="12" height="10" rx="2" fill="#1a1510" stroke="#775a2a" stroke-width="1"/>
+                <path d="M26 48 L24 68 L32 68 L30 48 Z" fill="#5a4a2a" stroke="#bb8a4a" stroke-width="1"/>
+                <rect x="70" y="45" width="4" height="4" rx="1" fill="#555"/>
+                <text x="48" y="65" font-size="6" fill="#886a3a" text-anchor="middle">AKM</text>
             </svg>`;
         }
         
+        // SCAR-L
         if (name.includes('scar')) {
             return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="24" y="37" width="54" height="16" rx="3" fill="#4a4535" stroke="#9a8a6a" stroke-width="1.5"/>
-                <rect x="32" y="31" width="7" height="6" fill="#3a3525" stroke="#7a6a4a" stroke-width="1"/>
-                <rect x="68" y="39" width="13" height="12" rx="2" fill="#2a2520" stroke="#6a5a3a" stroke-width="1"/>
-                <rect x="21" y="47" width="6" height="22" rx="2" fill="#5a4a3a" stroke="#9a8a6a" stroke-width="1"/>
-                <rect x="72" y="42" width="5" height="6" rx="1" fill="#555"/>
+                <rect x="28" y="39" width="52" height="14" rx="3" fill="#4a4535" stroke="#bb9a5a" stroke-width="1.2"/>
+                <rect x="35" y="34" width="7" height="5" fill="#3a3525" stroke="#997a3a" stroke-width="0.8"/>
+                <rect x="68" y="41" width="12" height="10" rx="2" fill="#2a2520" stroke="#886a3a" stroke-width="1"/>
+                <rect x="26" y="53" width="5" height="17" rx="2" fill="#5a4a3a" stroke="#bb9a5a" stroke-width="1"/>
+                <text x="50" y="65" font-size="6" fill="#997a3a" text-anchor="middle">SCAR</text>
             </svg>`;
         }
 
+        // Beryl
         if (name.includes('beryl')) {
             return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="23" y="36" width="53" height="17" rx="3" fill="#3a3530" stroke="#8a7a6a" stroke-width="1.5"/>
-                <rect x="29" y="31" width="8" height="5" fill="#2a2520" stroke="#6a5a4a" stroke-width="1"/>
-                <rect x="66" y="39" width="14" height="11" rx="2" fill="#1a1512" stroke="#5a4a3a" stroke-width="1"/>
-                <rect x="20" y="47" width="6" height="22" rx="2" fill="#5a4a3a" stroke="#9a8a6a" stroke-width="1"/>
+                <rect x="27" y="38" width="50" height="15" rx="2" fill="#3a3530" stroke="#aa8a5a" stroke-width="1.2"/>
+                <rect x="32" y="33" width="8" height="5" fill="#2a2520" stroke="#886a3a" stroke-width="0.8"/>
+                <rect x="67" y="40" width="12" height="11" rx="2" fill="#1a1512" stroke="#775a2a" stroke-width="1"/>
+                <rect x="25" y="53" width="5" height="17" rx="2" fill="#5a4a3a" stroke="#bb9a5a" stroke-width="1"/>
+                <text x="48" y="65" font-size="5" fill="#886a3a" text-anchor="middle">BERYL</text>
             </svg>`;
         }
 
-        if (name.includes('m16')) {
-            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="27" y="38" width="50" height="15" rx="2" fill="#3a3a3a" stroke="#7a7a7a" stroke-width="1.5"/>
-                <rect x="32" y="33" width="7" height="5" fill="#2a2a2a" stroke="#5a5a5a" stroke-width="1"/>
-                <rect x="68" y="40" width="10" height="11" rx="2" fill="#1a1a1a" stroke="#4a4a4a" stroke-width="1"/>
-                <rect x="25" y="53" width="5" height="18" rx="2" fill="#4a4a4a" stroke="#8a8a8a" stroke-width="1"/>
-            </svg>`;
-        }
-
-        if (name.includes('ace32')) {
-            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="24" y="37" width="52" height="16" rx="3" fill="#4a3a2a" stroke="#9a8a5a" stroke-width="1.5"/>
-                <rect x="30" y="32" width="9" height="5" fill="#3a2a1a" stroke="#7a6a3a" stroke-width="1"/>
-                <rect x="67" y="40" width="12" height="10" rx="2" fill="#2a1a0a" stroke="#6a5a2a" stroke-width="1"/>
-                <rect x="22" y="48" width="5" height="21" rx="2" fill="#5a4a3a" stroke="#aa8a5a" stroke-width="1"/>
-            </svg>`;
-        }
-
-        // Снайперские винтовки (только наземные: Kar98k, M24, SVD, Mini, SLR, Mk12)
+        // Kar98k
         if (name.includes('kar98k') || name.includes('kar')) {
             return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="20" y="40" width="58" height="12" rx="2" fill="#5a4a3a" stroke="#b89a6a" stroke-width="1.5"/>
-                <rect x="70" y="37" width="14" height="18" rx="3" fill="#3a2a1a" stroke="#8a6a4a" stroke-width="1.5"/>
-                <ellipse cx="48" cy="46" rx="8" ry="6" fill="#2a2015" stroke="#7a6a4a" stroke-width="1"/>
-                <rect x="18" y="52" width="5" height="20" rx="2" fill="#6a5a4a" stroke="#aa9a7a" stroke-width="1"/>
-                <line x1="78" y1="46" x2="88" y2="46" stroke="#aaa" stroke-width="2"/>
+                <rect x="22" y="42" width="56" height="10" rx="2" fill="#5a4a3a" stroke="#ccaa6a" stroke-width="1.2"/>
+                <rect x="68" y="39" width="14" height="16" rx="3" fill="#3a2a1a" stroke="#aa8a4a" stroke-width="1.2"/>
+                <ellipse cx="50" cy="47" rx="7" ry="5" fill="#2a2015" stroke="#997a3a" stroke-width="0.8"/>
+                <rect x="20" y="52" width="5" height="18" rx="2" fill="#6a5a4a" stroke="#ccaa7a" stroke-width="1"/>
+                <line x1="76" y1="47" x2="86" y2="47" stroke="#ccaa6a" stroke-width="2"/>
+                <text x="48" y="68" font-size="6" fill="#aa8a4a" text-anchor="middle">KAR98</text>
             </svg>`;
         }
         
+        // M24
         if (name.includes('m24')) {
             return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="18" y="41" width="60" height="11" rx="2" fill="#4a5a4a" stroke="#9aaa7a" stroke-width="1.5"/>
-                <rect x="68" y="38" width="15" height="17" rx="3" fill="#2a3a2a" stroke="#7a9a5a" stroke-width="1.5"/>
-                <rect x="16" y="52" width="5" height="18" rx="2" fill="#5a6a5a" stroke="#9aaa7a" stroke-width="1"/>
-                <rect x="72" y="44" width="6" height="5" rx="1" fill="#444"/>
+                <rect x="20" y="43" width="58" height="9" rx="2" fill="#4a5a4a" stroke="#aabb7a" stroke-width="1.2"/>
+                <rect x="66" y="40" width="14" height="15" rx="3" fill="#2a3a2a" stroke="#99aa5a" stroke-width="1.2"/>
+                <rect x="18" y="52" width="5" height="17" rx="2" fill="#5a6a5a" stroke="#bbcc8a" stroke-width="1"/>
+                <rect x="70" y="44" width="5" height="4" rx="1" fill="#555"/>
+                <text x="48" y="67" font-size="6" fill="#99aa5a" text-anchor="middle">M24</text>
             </svg>`;
         }
 
+        // SVD
         if (name.includes('svd') || name.includes('dragunov')) {
             return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="21" y="40" width="56" height="13" rx="2" fill="#5a5a4a" stroke="#aaaa7a" stroke-width="1.5"/>
-                <rect x="67" y="38" width="14" height="17" rx="3" fill="#3a3a2a" stroke="#8a8a5a" stroke-width="1.5"/>
-                <rect x="19" y="53" width="5" height="19" rx="2" fill="#6a6a5a" stroke="#baba8a" stroke-width="1"/>
-                <line x1="75" y1="47" x2="85" y2="47" stroke="#bbb" stroke-width="1.5"/>
+                <rect x="24" y="42" width="54" height="10" rx="2" fill="#5a5a4a" stroke="#bbbb7a" stroke-width="1.2"/>
+                <rect x="66" y="39" width="13" height="16" rx="3" fill="#3a3a2a" stroke="#aaaa5a" stroke-width="1.2"/>
+                <rect x="22" y="52" width="5" height="18" rx="2" fill="#6a6a5a" stroke="#cccc8a" stroke-width="1"/>
+                <line x1="73" y1="47" x2="83" y2="47" stroke="#bbbb7a" stroke-width="1.5"/>
+                <text x="48" y="67" font-size="6" fill="#aaaa5a" text-anchor="middle">SVD</text>
             </svg>`;
         }
 
-        if (name.includes('mini-14') || name.includes('mini')) {
+        // Mini-14
+        if (name.includes('mini')) {
             return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="25" y="42" width="52" height="11" rx="2" fill="#4a4a4a" stroke="#8a8a8a" stroke-width="1.5"/>
-                <rect x="65" y="39" width="12" height="17" rx="2" fill="#2a2a2a" stroke="#6a6a6a" stroke-width="1.5"/>
-                <rect x="23" y="53" width="5" height="17" rx="2" fill="#5a5a5a" stroke="#9a9a9a" stroke-width="1"/>
+                <rect x="28" y="44" width="50" height="9" rx="2" fill="#4a4a4a" stroke="#aaaaaa" stroke-width="1.2"/>
+                <rect x="66" y="41" width="12" height="15" rx="2" fill="#2a2a2a" stroke="#888888" stroke-width="1.2"/>
+                <rect x="26" y="53" width="5" height="16" rx="2" fill="#5a5a5a" stroke="#bbbbbb" stroke-width="1"/>
+                <text x="48" y="66" font-size="5" fill="#888" text-anchor="middle">MINI</text>
             </svg>`;
         }
 
+        // SLR
         if (name.includes('slr')) {
             return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="22" y="39" width="55" height="14" rx="2" fill="#5a4a3a" stroke="#ba9a6a" stroke-width="1.5"/>
-                <rect x="66" y="37" width="14" height="18" rx="3" fill="#3a2a1a" stroke="#9a7a4a" stroke-width="1.5"/>
-                <rect x="20" y="53" width="5" height="19" rx="2" fill="#6a5a4a" stroke="#caaa7a" stroke-width="1"/>
+                <rect x="25" y="41" width="54" height="11" rx="2" fill="#5a4a3a" stroke="#ccaa6a" stroke-width="1.2"/>
+                <rect x="67" y="38" width="13" height="17" rx="3" fill="#3a2a1a" stroke="#bb8a4a" stroke-width="1.2"/>
+                <rect x="23" y="52" width="5" height="18" rx="2" fill="#6a5a4a" stroke="#ddbb7a" stroke-width="1"/>
+                <text x="48" y="66" font-size="5" fill="#bb8a4a" text-anchor="middle">SLR</text>
             </svg>`;
         }
 
-        if (name.includes('mk12')) {
-            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="24" y="41" width="54" height="12" rx="2" fill="#4a5a5a" stroke="#8aaaaa" stroke-width="1.5"/>
-                <rect x="68" y="39" width="12" height="16" rx="2" fill="#2a3a3a" stroke="#6a8a8a" stroke-width="1.5"/>
-                <rect x="22" y="53" width="5" height="18" rx="2" fill="#5a6a6a" stroke="#9ababa" stroke-width="1"/>
-            </svg>`;
-        }
-
-        // Пистолеты-пулеметы (UMP, Vector, MP5K, Bizon, Tommy Gun, MP9)
+        // UMP
         if (name.includes('ump')) {
             return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="30" y="42" width="48" height="14" rx="2" fill="#3a3a3a" stroke="#7a7a7a" stroke-width="1.5"/>
-                <rect x="35" y="38" width="6" height="4" fill="#2a2a2a"/>
-                <rect x="68" y="44" width="12" height="10" rx="2" fill="#1a1a1a" stroke="#5a5a5a" stroke-width="1"/>
-                <rect x="28" y="50" width="5" height="18" rx="2" fill="#5a4a3a" stroke="#9a8a6a" stroke-width="1"/>
-                <rect x="72" y="46" width="5" height="6" rx="1" fill="#444"/>
+                <rect x="32" y="44" width="46" height="12" rx="2" fill="#3a3a3a" stroke="#999" stroke-width="1.2"/>
+                <rect x="36" y="40" width="6" height="4" fill="#2a2a2a"/>
+                <rect x="68" y="46" width="11" height="8" rx="2" fill="#1a1a1a" stroke="#666" stroke-width="1"/>
+                <rect x="30" y="56" width="5" height="14" rx="2" fill="#5a4a3a" stroke="#bb9a6a" stroke-width="1"/>
+                <rect x="72" y="48" width="4" height="4" rx="1" fill="#444"/>
+                <text x="48" y="66" font-size="5" fill="#888" text-anchor="middle">UMP</text>
             </svg>`;
         }
         
+        // Vector
         if (name.includes('vector')) {
             return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="28" y="43" width="50" height="12" rx="2" fill="#4a4540" stroke="#8a7a70" stroke-width="1.5"/>
-                <rect x="68" y="45" width="10" height="8" rx="1" fill="#2a2a2a" stroke="#6a6a6a" stroke-width="1"/>
-                <rect x="26" y="55" width="4" height="15" rx="2" fill="#5a4a3a" stroke="#9a8a6a" stroke-width="1"/>
-                <rect x="33" y="39" width="5" height="4" fill="#3a3a3a"/>
+                <rect x="30" y="45" width="48" height="10" rx="2" fill="#4a4540" stroke="#aa9a80" stroke-width="1.2"/>
+                <rect x="68" y="47" width="10" height="6" rx="1" fill="#2a2a2a" stroke="#888" stroke-width="1"/>
+                <rect x="28" y="55" width="4" height="13" rx="2" fill="#5a4a3a" stroke="#bbaa7a" stroke-width="1"/>
+                <rect x="35" y="41" width="4" height="4" fill="#3a3a3a"/>
+                <text x="48" y="64" font-size="5" fill="#aa9a80" text-anchor="middle">VECTOR</text>
             </svg>`;
         }
 
+        // MP5K
         if (name.includes('mp5k')) {
             return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="29" y="41" width="49" height="13" rx="2" fill="#3a4a3a" stroke="#7a9a6a" stroke-width="1.5"/>
-                <rect x="68" y="43" width="11" height="9" rx="1" fill="#2a3a2a" stroke="#6a8a5a" stroke-width="1"/>
-                <rect x="27" y="54" width="5" height="16" rx="2" fill="#5a6a4a" stroke="#9aba7a" stroke-width="1"/>
+                <rect x="31" y="43" width="47" height="11" rx="2" fill="#3a4a3a" stroke="#99bb6a" stroke-width="1.2"/>
+                <rect x="68" y="45" width="10" height="7" rx="1" fill="#2a3a2a" stroke="#88aa5a" stroke-width="1"/>
+                <rect x="29" y="54" width="5" height="14" rx="2" fill="#5a6a4a" stroke="#bbdd8a" stroke-width="1"/>
+                <text x="48" y="64" font-size="5" fill="#88aa5a" text-anchor="middle">MP5K</text>
             </svg>`;
         }
 
-        if (name.includes('bizon')) {
-            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="30" y="44" width="45" height="12" rx="2" fill="#4a4a4a" stroke="#8a8a8a" stroke-width="1.5"/>
-                <circle cx="55" cy="50" r="10" fill="#3a3a3a" stroke="#7a7a7a" stroke-width="1.5"/>
-                <rect x="28" y="56" width="5" height="14" rx="2" fill="#5a5a5a" stroke="#9a9a9a" stroke-width="1"/>
-            </svg>`;
-        }
-
+        // Tommy Gun
         if (name.includes('tommy')) {
             return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="26" y="41" width="52" height="14" rx="2" fill="#5a4a3a" stroke="#ba9a6a" stroke-width="1.5"/>
-                <circle cx="50" cy="48" r="8" fill="#3a2a1a" stroke="#9a7a4a" stroke-width="1"/>
-                <rect x="24" y="55" width="5" height="18" rx="2" fill="#6a5a4a" stroke="#caaa7a" stroke-width="1"/>
+                <rect x="28" y="43" width="50" height="12" rx="2" fill="#5a4a3a" stroke="#ccaa6a" stroke-width="1.2"/>
+                <circle cx="52" cy="49" r="7" fill="#3a2a1a" stroke="#bb8a4a" stroke-width="1"/>
+                <rect x="26" y="55" width="5" height="16" rx="2" fill="#6a5a4a" stroke="#ddbb7a" stroke-width="1"/>
+                <text x="48" y="66" font-size="5" fill="#bb8a4a" text-anchor="middle">TOMMY</text>
             </svg>`;
         }
 
-        if (name.includes('mp9')) {
-            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="31" y="42" width="46" height="13" rx="2" fill="#3a3a3a" stroke="#7a7a7a" stroke-width="1.5"/>
-                <rect x="67" y="44" width="10" height="9" rx="1" fill="#1a1a1a" stroke="#5a5a5a" stroke-width="1"/>
-                <rect x="29" y="55" width="4" height="15" rx="2" fill="#5a4a3a" stroke="#9a8a6a" stroke-width="1"/>
-            </svg>`;
-        }
-
-        // Дробовики
+        // DBS
         if (name.includes('dbs')) {
             return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="25" y="39" width="45" height="20" rx="3" fill="#4a3a2a" stroke="#ba9a6a" stroke-width="1.5"/>
-                <rect x="60" y="42" width="12" height="14" rx="2" fill="#2a1a0a" stroke="#8a6a3a" stroke-width="1"/>
-                <rect x="68" y="45" width="4" height="8" rx="1" fill="#555"/>
-                <rect x="23" y="52" width="6" height="18" rx="2" fill="#6a5a4a" stroke="#ba9a7a" stroke-width="1"/>
+                <rect x="27" y="41" width="44" height="18" rx="3" fill="#4a3a2a" stroke="#ccaa6a" stroke-width="1.2"/>
+                <rect x="60" y="44" width="11" height="12" rx="2" fill="#2a1a0a" stroke="#aa8a3a" stroke-width="1"/>
+                <rect x="68" y="47" width="3" height="6" rx="1" fill="#555"/>
+                <rect x="25" y="59" width="5" height="14" rx="2" fill="#6a5a4a" stroke="#ddbb7a" stroke-width="1"/>
+                <text x="46" y="68" font-size="5" fill="#aa8a3a" text-anchor="middle">DBS</text>
             </svg>`;
         }
         
-        if (name.includes('s12k')) {
-            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="27" y="38" width="48" height="18" rx="3" fill="#5a4a3a" stroke="#ba9a6a" stroke-width="1.5"/>
-                <rect x="65" y="41" width="12" height="12" rx="2" fill="#3a2a1a" stroke="#8a6a3a" stroke-width="1"/>
-                <rect x="25" y="56" width="5" height="16" rx="2" fill="#6a5a4a" stroke="#caaa7a" stroke-width="1"/>
-                <rect x="30" y="34" width="6" height="4" fill="#4a3a2a"/>
-            </svg>`;
-        }
-
+        // S686
         if (name.includes('s686')) {
             return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="30" y="41" width="42" height="16" rx="2" fill="#5a4a3a" stroke="#caaa7a" stroke-width="1.5"/>
-                <rect x="62" y="44" width="10" height="10" rx="2" fill="#3a2a1a" stroke="#9a7a4a" stroke-width="1"/>
-                <rect x="28" y="57" width="5" height="15" rx="2" fill="#6a5a4a" stroke="#ba9a6a" stroke-width="1"/>
+                <rect x="32" y="43" width="40" height="14" rx="2" fill="#5a4a3a" stroke="#ddbb7a" stroke-width="1.2"/>
+                <rect x="62" y="46" width="9" height="8" rx="2" fill="#3a2a1a" stroke="#bb9a4a" stroke-width="1"/>
+                <rect x="30" y="57" width="5" height="13" rx="2" fill="#6a5a4a" stroke="#eecd8a" stroke-width="1"/>
+                <text x="48" y="66" font-size="5" fill="#bb9a4a" text-anchor="middle">S686</text>
             </svg>`;
         }
 
-        // Пулеметы (M249, DP-28 — наземные)
+        // M249
         if (name.includes('m249')) {
             return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="20" y="40" width="60" height="14" rx="2" fill="#4a5a3a" stroke="#9aba6a" stroke-width="1.5"/>
-                <rect x="70" y="42" width="8" height="10" rx="1" fill="#2a3a1a" stroke="#6a9a3a" stroke-width="1"/>
-                <rect x="18" y="54" width="6" height="18" rx="2" fill="#5a6a4a" stroke="#aaba7a" stroke-width="1"/>
-                <circle cx="50" cy="47" r="4" fill="#3a4a2a" stroke="#8aaa5a" stroke-width="0.8"/>
+                <rect x="22" y="42" width="58" height="12" rx="2" fill="#4a5a3a" stroke="#aacc6a" stroke-width="1.2"/>
+                <rect x="70" y="44" width="8" height="8" rx="1" fill="#2a3a1a" stroke="#88aa4a" stroke-width="1"/>
+                <rect x="20" y="54" width="6" height="16" rx="2" fill="#5a6a4a" stroke="#bbdd8a" stroke-width="1"/>
+                <circle cx="50" cy="48" r="3" fill="#3a4a2a" stroke="#99bb5a" stroke-width="0.8"/>
+                <text x="48" y="66" font-size="5" fill="#88aa4a" text-anchor="middle">M249</text>
             </svg>`;
         }
 
+        // DP-28
         if (name.includes('dp-28') || name.includes('dp')) {
             return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="25" y="42" width="50" height="12" rx="2" fill="#5a4a3a" stroke="#ba9a6a" stroke-width="1.5"/>
-                <circle cx="55" cy="48" r="10" fill="#3a2a1a" stroke="#9a7a4a" stroke-width="1.5"/>
-                <rect x="23" y="54" width="5" height="18" rx="2" fill="#6a5a4a" stroke="#ba9a6a" stroke-width="1"/>
-                <circle cx="55" cy="48" r="4" fill="#5a4a3a"/>
+                <rect x="27" y="44" width="48" height="10" rx="2" fill="#5a4a3a" stroke="#ccaa6a" stroke-width="1.2"/>
+                <circle cx="55" cy="49" r="9" fill="#3a2a1a" stroke="#bb8a4a" stroke-width="1.2"/>
+                <rect x="25" y="54" width="5" height="16" rx="2" fill="#6a5a4a" stroke="#ddbb7a" stroke-width="1"/>
+                <circle cx="55" cy="49" r="3" fill="#5a4a3a"/>
+                <text x="48" y="66" font-size="5" fill="#bb8a4a" text-anchor="middle">DP-28</text>
             </svg>`;
         }
 
-        // Арбалет + пистолеты
-        if (name.includes('crossbow')) {
-            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 50 L80 50" stroke="#8a6a3a" stroke-width="3"/>
-                <path d="M30 40 L20 50 L30 60" stroke="#6a4a2a" stroke-width="2" fill="none"/>
-                <rect x="45" y="46" width="10" height="8" rx="2" fill="#5a4a2a" stroke="#aa8a5a" stroke-width="1"/>
-                <line x1="80" y1="50" x2="90" y2="50" stroke="#aaa" stroke-width="1.5"/>
-            </svg>`;
-        }
-
+        // Deagle
         if (name.includes('deagle')) {
             return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="35" y="45" width="40" height="12" rx="2" fill="#4a4a4a" stroke="#aaa" stroke-width="1.5"/>
-                <rect x="65" y="47" width="10" height="8" rx="1" fill="#2a2a2a" stroke="#777" stroke-width="1"/>
-                <rect x="33" y="57" width="4" height="12" rx="1" fill="#5a5a5a" stroke="#9a9a9a" stroke-width="1"/>
+                <rect x="38" y="47" width="38" height="10" rx="2" fill="#4a4a4a" stroke="#ccc" stroke-width="1.2"/>
+                <rect x="66" y="49" width="9" height="6" rx="1" fill="#2a2a2a" stroke="#999" stroke-width="1"/>
+                <rect x="36" y="57" width="4" height="10" rx="1" fill="#5a5a5a" stroke="#aaa" stroke-width="1"/>
+                <text x="52" y="65" font-size="4" fill="#999" text-anchor="middle">DEAGLE</text>
             </svg>`;
         }
 
-        if (name.includes('glock') || name.includes('p18c')) {
+        // Glock
+        if (name.includes('glock')) {
             return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="38" y="47" width="38" height="10" rx="2" fill="#3a3a3a" stroke="#8a8a8a" stroke-width="1.5"/>
-                <rect x="66" y="49" width="8" height="6" rx="1" fill="#1a1a1a" stroke="#5a5a5a" stroke-width="1"/>
-                <rect x="36" y="57" width="4" height="10" rx="1" fill="#4a4a4a" stroke="#7a7a7a" stroke-width="1"/>
+                <rect x="40" y="49" width="36" height="8" rx="2" fill="#3a3a3a" stroke="#aaa" stroke-width="1.2"/>
+                <rect x="66" y="51" width="7" height="5" rx="1" fill="#1a1a1a" stroke="#777" stroke-width="1"/>
+                <rect x="38" y="57" width="4" height="8" rx="1" fill="#4a4a4a" stroke="#999" stroke-width="1"/>
+                <text x="53" y="63" font-size="4" fill="#888" text-anchor="middle">GLOCK</text>
             </svg>`;
         }
 
-        if (name.includes('1911')) {
+        // Crossbow
+        if (name.includes('crossbow')) {
             return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="36" y="46" width="39" height="11" rx="2" fill="#5a5a5a" stroke="#aaa" stroke-width="1.5"/>
-                <rect x="65" y="48" width="9" height="7" rx="1" fill="#3a3a3a" stroke="#777" stroke-width="1"/>
-                <rect x="34" y="57" width="4" height="11" rx="1" fill="#6a6a6a" stroke="#9a9a9a" stroke-width="1"/>
+                <line x1="18" y1="50" x2="82" y2="50" stroke="#aa8a4a" stroke-width="3"/>
+                <path d="M28 40 L18 50 L28 60" stroke="#886a3a" stroke-width="2" fill="none"/>
+                <rect x="44" y="46" width="12" height="8" rx="2" fill="#6a4a2a" stroke="#ccaa6a" stroke-width="1"/>
+                <line x1="82" y1="50" x2="90" y2="50" stroke="#bb9944" stroke-width="1.5"/>
+                <text x="48" y="68" font-size="5" fill="#aa8a4a" text-anchor="middle">BOW</text>
             </svg>`;
         }
 
-        if (name.includes('r1895')) {
-            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="40" y="47" width="34" height="10" rx="3" fill="#5a4a3a" stroke="#caaa7a" stroke-width="1.5"/>
-                <circle cx="52" cy="52" r="5" fill="#3a2a1a" stroke="#aa8a5a" stroke-width="1"/>
-                <rect x="38" y="57" width="4" height="10" rx="1" fill="#6a5a4a" stroke="#ba9a7a" stroke-width="1"/>
-            </svg>`;
-        }
-
-        // Дефолтная иконка
+        // Дефолт
         return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="30" y="40" width="45" height="14" rx="2" fill="#5a5a5a" stroke="#aaa" stroke-width="1.5"/>
-            <rect x="65" y="42" width="10" height="10" rx="2" fill="#3a3a3a" stroke="#777" stroke-width="1"/>
-            <rect x="28" y="54" width="5" height="18" rx="2" fill="#6a5a4a" stroke="#ba9a6a" stroke-width="1"/>
-            <rect x="28" y="44" width="4" height="6" fill="#4a4a4a"/>
+            <rect x="32" y="42" width="44" height="12" rx="2" fill="#5a5a5a" stroke="#bbb" stroke-width="1.2"/>
+            <rect x="66" y="44" width="10" height="8" rx="2" fill="#3a3a3a" stroke="#999" stroke-width="1"/>
+            <rect x="30" y="54" width="5" height="16" rx="2" fill="#6a5a4a" stroke="#ccaa7a" stroke-width="1"/>
         </svg>`;
     }
 
-    // --------------------------------------------------------------
-    // ФИНАЛЬНЫЙ СПИСОК ОРУЖИЯ (ТОЛЬКО GROUND LOOT + ЕСТЬ ВЕЗДЕ)
-    // --------------------------------------------------------------
+    // СПИСОК ОРУЖИЯ (ground loot, все карты)
     const weaponsList = [
-        // Штурмовые винтовки
         { name: "M416", type: "Штурмовая винтовка" },
         { name: "SCAR-L", type: "Штурмовая винтовка" },
         { name: "AKM", type: "Штурмовая винтовка" },
         { name: "Beryl M762", type: "Штурмовая винтовка" },
         { name: "M16A4", type: "Штурмовая винтовка" },
         { name: "ACE32", type: "Штурмовая винтовка" },
-        // Снайперские/марксманские
         { name: "Kar98k", type: "Снайперская винтовка" },
         { name: "M24", type: "Снайперская винтовка" },
         { name: "Dragunov SVD", type: "Марксманская винтовка" },
         { name: "Mini-14", type: "Марксманская винтовка" },
         { name: "SLR", type: "Марксманская винтовка" },
-        { name: "Mk12", type: "Марксманская винтовка" },
-        // Пистолеты-пулеметы
         { name: "UMP-45", type: "Пистолет-пулемёт" },
         { name: "Vector", type: "Пистолет-пулемёт" },
         { name: "MP5K", type: "Пистолет-пулемёт" },
         { name: "PP-19 Bizon", type: "Пистолет-пулемёт" },
         { name: "Tommy Gun", type: "Пистолет-пулемёт" },
-        { name: "MP9", type: "Пистолет-пулемёт" },
-        // Дробовики
         { name: "DBS", type: "Дробовик" },
-        { name: "S12K", type: "Дробовик" },
-        { name: "S686", type: "Дробовик" },
-        // Пулеметы
-        { name: "M249", type: "Пулемёт" },
-        { name: "DP-28", type: "Пулемёт" },
-        // Арбалет
-        { name: "Crossbow", type: "Арбалет" },
-        // Пистолеты
-        { name: "Deagle", type: "Пистолет" },
-        { name: "Glock 18C", type: "Пистолет" },
-        { name: "P1911", type: "Пистолет" },
-        { name: "R1895", type: "Револьвер" }
-    ];
-
-    function getRandomWeapon() {
-        const randomIndex = Math.floor(Math.random() * weaponsList.length);
-        return { ...weaponsList[randomIndex] };
-    }
-
-    function getTwoDistinctWeapons() {
-        let weaponA = getRandomWeapon();
-        let weaponB = getRandomWeapon();
-        let attempts = 0;
-        while (weaponA.name === weaponB.name && attempts < 6) {
-            weaponB = getRandomWeapon();
-            attempts++;
-        }
-        return [weaponA, weaponB];
-    }
-
-    // DOM элементы
-    const weaponName1 = document.getElementById('weaponName1');
-    const weaponIcon1 = document.getElementById('weaponIcon1');
-    const weaponType1 = document.getElementById('weaponType1');
-    const weaponName2 = document.getElementById('weaponName2');
-    const weaponIcon2 = document.getElementById('weaponIcon2');
-    const weaponType2 = document.getElementById('weaponType2');
-    const rollBtn = document.getElementById('rollBtn');
-    const slot1Div = document.getElementById('weaponSlot1');
-    const slot2Div = document.getElementById('weaponSlot2');
-
-    function updateWeaponDisplay(weapon, iconContainer, nameElem, typeElem) {
-        nameElem.innerText = weapon.name;
-        typeElem.innerText = weapon.type;
-        const svgHtml = getWeaponSVG(weapon.name, weapon.type);
-        iconContainer.innerHTML = svgHtml;
-    }
-
-    function animateSlot(slotElement) {
-        slotElement.classList.add('animate-weapon');
-        setTimeout(() => {
-            slotElement.classList.remove('animate-weapon');
-        }, 350);
-    }
-
-    function updateWeapons() {
-        const [weaponObj1, weaponObj2] = getTwoDistinctWeapons();
-        
-        updateWeaponDisplay(weaponObj1, weaponIcon1, weaponName1, weaponType1);
-        updateWeaponDisplay(weaponObj2, weaponIcon2, weaponName2, weaponType2);
-        
-        animateSlot(slot1Div);
-        animateSlot(slot2Div);
-        
-        rollBtn.style.transform = "scale(0.98)";
-        setTimeout(() => { rollBtn.style.transform = ""; }, 100);
-    }
-
-    function initRandomOnLoad() {
-        const [firstWeapon, secondWeapon] = getTwoDistinctWeapons();
-        updateWeaponDisplay(firstWeapon, weaponIcon1, weaponName1, weaponType1);
-        updateWeaponDisplay(secondWeapon, weaponIcon2, weaponName2, weaponType2);
-        
-        setTimeout(() => {
-            animateSlot(slot1Div);
-            animateSlot(slot2Div);
-        }, 100);
-    }
-
-    rollBtn.addEventListener('click', () => {
-        updateWeapons();
-        rollBtn.style.boxShadow = "0 5px 0 #0f130b";
-        setTimeout(() => {
-            rollBtn.style.boxShadow = "0 8px 0 #0f130b";
-        }, 80);
-    });
-
-    initRandomOnLoad();
-
-    window.addEventListener('keydown', (e) => {
-        if (e.code === 'Space' && !e.repeat && document.activeElement !== rollBtn) {
-            e.preventDefault();
-            updateWeapons();
-            rollBtn.style.transform = "scale(0.96)";
-            setTimeout(() => { if(rollBtn) rollBtn.style.transform = ""; }, 120);
-        }
-    });
-</script>
-</body>
-</html>
+        { name: "S12K", type: "Дробови
