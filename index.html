@@ -2,227 +2,467 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PUBG RANDOMIZER</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>PUBG RANDOMIZER — честный рандомайзер оружия</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            user-select: none; /* чтобы не выделялся текст при кликах */
         }
+
         body {
-            background: radial-gradient(circle at 20% 30%, #1a2a1f, #0a0f0a);
-            font-family: 'Segoe UI', system-ui, sans-serif;
             min-height: 100vh;
+            background: radial-gradient(circle at 20% 30%, #0f1a0e, #030603);
+            font-family: 'Segoe UI', 'Poppins', system-ui, -apple-system, 'Impact', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
         }
+
+        /* главная карточка */
         .card {
-            background: rgba(10, 14, 8, 0.9);
-            border-radius: 40px;
-            border: 2px solid #c9a03d;
-            padding: 30px;
-            text-align: center;
-            max-width: 900px;
+            max-width: 1100px;
             width: 100%;
+            background: rgba(6, 10, 4, 0.85);
+            backdrop-filter: blur(3px);
+            border-radius: 70px 50px 70px 50px;
+            border: 2px solid rgba(210, 180, 70, 0.8);
+            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.7), inset 0 1px 2px rgba(255, 245, 180, 0.1);
+            padding: 30px 25px 40px;
+            text-align: center;
+            transition: 0.2s;
         }
-        h1 {
-            font-size: 2.2rem;
-            color: #f5e56b;
+
+        /* заголовок со сковородками */
+        .game-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: 4px;
+            background: linear-gradient(135deg, #f5e56b, #c9a03d);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 3px rgba(0, 0, 0, 0.5);
+            margin-bottom: 12px;
+            text-transform: uppercase;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 15px;
-            margin-bottom: 15px;
+            gap: 14px;
+            flex-wrap: wrap;
         }
-        .pan {
-            font-size: 2rem;
+
+        .pan-icon {
+            font-size: 2.2rem;
+            filter: drop-shadow(0 2px 4px black);
+            transform: rotate(-8deg);
         }
+
+        .pan-icon:last-child {
+            transform: rotate(8deg);
+        }
+
         .sub {
-            color: #bcab6e;
-            margin-bottom: 30px;
+            color: #dac67a;
+            font-weight: 500;
+            border-top: 1px solid #6a5a2a;
+            display: inline-block;
+            padding: 10px 20px;
+            margin-bottom: 35px;
+            font-size: 1rem;
+            background: #1f261a60;
+            border-radius: 60px;
+            backdrop-filter: blur(2px);
         }
-        .weapons {
+
+        .badge {
+            background: #3a4a2a;
+            font-size: 0.7rem;
+            padding: 3px 12px;
+            border-radius: 30px;
+            margin-left: 8px;
+            color: #e9f5cf;
+        }
+
+        /* панель двух слотов */
+        .weapons-panel {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 30px;
-            margin: 30px 0;
+            gap: 35px;
+            margin: 25px 0 35px;
         }
+
         .weapon-slot {
-            background: #0e130b;
-            border-radius: 25px;
-            padding: 25px;
-            width: 260px;
-            border: 1px solid #4e6b2c;
-            transition: 0.2s;
-        }
-        .weapon-slot:hover {
-            transform: translateY(-5px);
-            border-color: #c9a03d;
-        }
-        .slot-label {
-            background: #2a2416;
-            display: inline-block;
-            padding: 5px 18px;
+            background: linear-gradient(145deg, #0b1208, #060904);
             border-radius: 40px;
-            color: #eace7b;
+            padding: 28px 15px;
+            width: 280px;
+            min-width: 250px;
+            flex: 1;
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 240, 160, 0.1);
+            border: 1px solid #5e7a3a;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .weapon-slot::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(230, 200, 70, 0.08), transparent);
+            transition: left 0.5s;
+        }
+
+        .weapon-slot:hover::after {
+            left: 100%;
+        }
+
+        .weapon-slot:hover {
+            transform: translateY(-8px);
+            border-color: #e7c458;
+            box-shadow: 0 22px 35px rgba(0, 0, 0, 0.8);
+        }
+
+        .slot-label {
+            font-size: 1.2rem;
+            background: #26200e;
+            display: inline-block;
+            padding: 5px 20px;
+            border-radius: 40px;
+            color: #ecd97a;
             font-weight: bold;
+            letter-spacing: 1px;
             margin-bottom: 20px;
+            border: 1px solid #a5883a;
         }
+
         .weapon-icon {
-            font-size: 4rem;
             margin: 15px 0;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
+
+        .weapon-icon svg {
+            width: 85px;
+            height: 85px;
+            filter: drop-shadow(0 5px 8px black);
+            transition: transform 0.2s;
+        }
+
+        .weapon-slot:hover .weapon-icon svg {
+            transform: scale(1.05);
+        }
+
         .weapon-name {
+            font-size: 1.9rem;
+            font-weight: 800;
+            color: #fef7cf;
+            text-shadow: 0 2px 0 #2f3e1c;
+            margin: 10px 0 5px;
+            background: #1b2815b3;
+            display: inline-block;
+            padding: 0 16px;
+            border-radius: 50px;
+            letter-spacing: 1px;
+        }
+
+        .weapon-type {
+            font-size: 0.85rem;
+            color: #cdbd7a;
+            background: #1e2416;
+            display: inline-block;
+            padding: 5px 16px;
+            border-radius: 40px;
+            margin-top: 12px;
+        }
+
+        /* кнопка рандома */
+        .randomize-btn {
+            background: linear-gradient(145deg, #2c3e1f, #1a2812);
+            border: none;
+            padding: 16px 32px;
             font-size: 1.6rem;
             font-weight: bold;
-            color: #f7f3da;
-            background: #1e2817;
-            display: inline-block;
-            padding: 5px 15px;
-            border-radius: 40px;
-        }
-        .weapon-type {
-            color: #b9b27a;
-            margin-top: 12px;
-            font-size: 0.8rem;
-        }
-        button {
-            background: linear-gradient(145deg, #2c3e1f, #1e2a14);
-            border: none;
-            padding: 15px 35px;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #ffeaac;
+            text-transform: uppercase;
+            color: #ffefb0;
             border-radius: 60px;
             cursor: pointer;
             box-shadow: 0 8px 0 #0f130b;
-            margin-top: 15px;
+            transition: 0.07s linear;
+            width: 85%;
+            max-width: 380px;
+            letter-spacing: 2px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin: 15px auto 5px;
+            font-family: inherit;
         }
-        button:active {
+
+        .randomize-btn:active {
             transform: translateY(4px);
             box-shadow: 0 4px 0 #0f130b;
         }
-        .hint {
-            color: #7f8c5e;
-            margin-top: 20px;
-            font-size: 0.8rem;
+
+        .reroll-hint {
+            font-size: 0.85rem;
+            margin-top: 22px;
+            color: #8f9e6e;
+            background: #1f261a90;
+            display: inline-block;
+            padding: 7px 22px;
+            border-radius: 40px;
+            backdrop-filter: blur(3px);
         }
-        @keyframes pop {
-            0% { transform: scale(0.9); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
+
+        @keyframes popAnim {
+            0% {
+                transform: scale(0.85);
+                opacity: 0;
+            }
+            80% {
+                transform: scale(1.02);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
-        .animate {
-            animation: pop 0.3s ease;
+
+        .animate-weapon {
+            animation: popAnim 0.32s cubic-bezier(0.2, 0.9, 0.4, 1.1);
         }
+
         footer {
-            margin-top: 25px;
+            margin-top: 28px;
             font-size: 0.7rem;
-            color: #6c6e4e;
+            color: #6f725a;
+        }
+
+        @media (max-width: 700px) {
+            .card {
+                padding: 20px 16px;
+            }
+            .weapon-name {
+                font-size: 1.4rem;
+            }
+            .weapon-icon svg {
+                width: 65px;
+                height: 65px;
+            }
+            .randomize-btn {
+                font-size: 1.3rem;
+                padding: 12px 20px;
+            }
+            .game-title {
+                font-size: 1.9rem;
+            }
         }
     </style>
 </head>
 <body>
-<div class="card">
-    <h1>
-        <span class="pan">🍳</span>
-        PUBG RANDOMIZER
-        <span class="pan">🍳</span>
-    </h1>
-    <div class="sub">🎲 нажми — получи 2 пушки | играй только с ними 🎲</div>
 
-    <div class="weapons">
-        <div class="weapon-slot" id="slot1">
+<div class="card">
+    <div class="game-title">
+        <span class="pan-icon">🍳</span>
+        PUBG RANDOMIZER
+        <span class="pan-icon">🍳</span>
+    </div>
+    <div class="sub">
+        🎲 нажми — получи 2 пушки | играй только с ними 🎲
+        <span class="badge">🌍 все карты</span>
+        <span class="badge">🎯 ground loot</span>
+    </div>
+
+    <div class="weapons-panel">
+        <div class="weapon-slot" id="weaponSlot1">
             <div class="slot-label">ОСНОВНОЕ</div>
-            <div class="weapon-icon" id="icon1">🔫</div>
-            <div class="weapon-name" id="name1">—</div>
-            <div class="weapon-type" id="type1">жду рандома</div>
+            <div class="weapon-icon" id="weaponIcon1"></div>
+            <div class="weapon-name" id="weaponName1">—</div>
+            <div class="weapon-type" id="weaponType1">жду рандома</div>
         </div>
-        <div class="weapon-slot" id="slot2">
+        <div class="weapon-slot" id="weaponSlot2">
             <div class="slot-label">ВТОРОЕ</div>
-            <div class="weapon-icon" id="icon2">🔫</div>
-            <div class="weapon-name" id="name2">—</div>
-            <div class="weapon-type" id="type2">жду рандома</div>
+            <div class="weapon-icon" id="weaponIcon2"></div>
+            <div class="weapon-name" id="weaponName2">—</div>
+            <div class="weapon-type" id="weaponType2">жду рандома</div>
         </div>
     </div>
 
-    <button id="rollBtn">🎲 ВЫБРАТЬ ОРУЖИЕ 🎲</button>
-    <div class="hint">⚡ нажми, чтобы получить новый набор | только эти два до конца матча ⚡</div>
-    <footer>🔥 только наземный лут | нет крэйтов, нет карточных эксклюзивов 🔥</footer>
+    <button class="randomize-btn" id="rollBtn">🎲 ВЫБРАТЬ ОРУЖИЕ 🎲</button>
+    <div class="reroll-hint">⚡ нажми, чтобы получить новый набор | только эти два до конца матча ⚡</div>
+    <footer>🔥 только наземный лут | без крэйтов и карточных эксклюзивов | актуально на июнь 2026</footer>
 </div>
 
 <script>
-    // СПИСОК ОРУЖИЯ (только ground loot, все карты)
-    const weapons = [
-        "M416", "SCAR-L", "AKM", "Beryl M762", "M16A4", "ACE32",
-        "Kar98k", "M24", "Dragunov SVD", "Mini-14", "SLR",
-        "UMP-45", "Vector", "MP5K", "PP-19 Bizon", "Tommy Gun",
-        "DBS", "S12K", "S686",
-        "M249", "DP-28",
-        "Crossbow", "Deagle", "Glock 18C", "P1911"
+    // --------------------------------------------------------------
+    // ФИНАЛЬНЫЙ СПИСОК ОРУЖИЯ (только универсальный ground loot)
+    // Убрано: Bizon, P1911, R45, DP-28, Mosin, QBU, K2, G36C, QBZ (карточные)
+    // Оставлены стволы, которые есть на всех картах в луте
+    // --------------------------------------------------------------
+    const weaponsDB = [
+        // Штурмовые винтовки (везде)
+        { name: "M416", type: "Штурмовая винтовка", iconHint: "m4" },
+        { name: "SCAR-L", type: "Штурмовая винтовка", iconHint: "scar" },
+        { name: "AKM", type: "Штурмовая винтовка", iconHint: "akm" },
+        { name: "Beryl M762", type: "Штурмовая винтовка", iconHint: "beryl" },
+        { name: "M16A4", type: "Штурмовая винтовка", iconHint: "m16" },
+        { name: "ACE32", type: "Штурмовая винтовка", iconHint: "ace" },
+        { name: "AUG A3", type: "Штурмовая винтовка", iconHint: "aug" },
+        // Снайперские / марксманские
+        { name: "Kar98k", type: "Снайперская винтовка", iconHint: "kar98" },
+        { name: "M24", type: "Снайперская винтовка", iconHint: "m24" },
+        { name: "Dragunov SVD", type: "Марксманская винтовка", iconHint: "svd" },
+        { name: "Mini-14", type: "Марксманская винтовка", iconHint: "mini" },
+        { name: "SLR", type: "Марксманская винтовка", iconHint: "slr" },
+        { name: "Mk12", type: "Марксманская винтовка", iconHint: "mk12" },
+        // Пистолеты-пулемёты
+        { name: "UMP-45", type: "Пистолет-пулемёт", iconHint: "ump" },
+        { name: "Vector", type: "Пистолет-пулемёт", iconHint: "vector" },
+        { name: "MP5K", type: "Пистолет-пулемёт", iconHint: "mp5k" },
+        { name: "Tommy Gun", type: "Пистолет-пулемёт", iconHint: "tommy" },
+        { name: "MP9", type: "Пистолет-пулемёт", iconHint: "mp9" },
+        { name: "P90", type: "Пистолет-пулемёт", iconHint: "p90" },
+        // Дробовики
+        { name: "DBS", type: "Дробовик", iconHint: "dbs" },
+        { name: "S12K", type: "Дробовик", iconHint: "s12k" },
+        { name: "S686", type: "Дробовик", iconHint: "s686" },
+        { name: "O12", type: "Дробовик", iconHint: "o12" },
+        // Пулемёты
+        { name: "M249", type: "Пулемёт", iconHint: "m249" },
+        { name: "MG3", type: "Пулемёт", iconHint: "mg3" },
+        // Прочее оружие (везде)
+        { name: "Crossbow", type: "Арбалет", iconHint: "crossbow" },
+        { name: "Deagle", type: "Пистолет", iconHint: "deagle" },
+        { name: "Glock 18C", type: "Пистолет", iconHint: "glock" },
+        { name: "Skorpion", type: "Пистолет-пулемёт", iconHint: "skorpion" },
+        { name: "Win94", type: "Винтовка", iconHint: "win94" }
     ];
 
-    const weaponIcons = {
-        "M416": "🔫", "SCAR-L": "🔫", "AKM": "💥", "Beryl M762": "⚙️", "M16A4": "🎯", "ACE32": "🌍",
-        "Kar98k": "🎯", "M24": "💀", "Dragunov SVD": "🎖️", "Mini-14": "📏", "SLR": "🔊",
-        "UMP-45": "🛡️", "Vector": "🌀", "MP5K": "🔰", "PP-19 Bizon": "📀", "Tommy Gun": "🍂",
-        "DBS": "🐉", "S12K": "🔧", "S686": "🎲",
-        "M249": "⛓️", "DP-28": "📀",
-        "Crossbow": "🏹", "Deagle": "💪", "Glock 18C": "🔫", "P1911": "⚙️"
-    };
-
-    const weaponTypes = {
-        "M416": "Штурмовая винтовка", "SCAR-L": "Штурмовая винтовка", "AKM": "Штурмовая винтовка",
-        "Beryl M762": "Штурмовая винтовка", "M16A4": "Штурмовая винтовка", "ACE32": "Штурмовая винтовка",
-        "Kar98k": "Снайперская винтовка", "M24": "Снайперская винтовка", "Dragunov SVD": "Марксманская винтовка",
-        "Mini-14": "Марксманская винтовка", "SLR": "Марксманская винтовка",
-        "UMP-45": "Пистолет-пулемёт", "Vector": "Пистолет-пулемёт", "MP5K": "Пистолет-пулемёт",
-        "PP-19 Bizon": "Пистолет-пулемёт", "Tommy Gun": "Пистолет-пулемёт",
-        "DBS": "Дробовик", "S12K": "Дробовик", "S686": "Дробовик",
-        "M249": "Пулемёт", "DP-28": "Пулемёт",
-        "Crossbow": "Арбалет", "Deagle": "Пистолет", "Glock 18C": "Пистолет", "P1911": "Пистолет"
-    };
+    // Уникальные SVG-силуэты под каждый тип оружия (стилизовано, но читаемо)
+    function getWeaponSVG(weapon) {
+        const hint = weapon.iconHint || weapon.name.toLowerCase();
+        // Общие контуры для групп
+        if (hint === "m4" || weapon.name === "M416") {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="28" y="38" width="52" height="14" rx="2" fill="#2d2d2d" stroke="#b0b0b0" stroke-width="1.2"/><rect x="34" y="33" width="8" height="5" fill="#3a3a3a" stroke="#888" stroke-width="0.8"/><rect x="70" y="40" width="12" height="10" rx="2" fill="#1a1a1a" stroke="#777" stroke-width="1"/><rect x="26" y="52" width="5" height="18" rx="2" fill="#4a3a2a" stroke="#c99f5c" stroke-width="1"/><text x="50" y="70" font-size="6" fill="#aaa" text-anchor="middle">M416</text></svg>`;
+        }
+        if (hint === "akm") {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="26" y="40" width="50" height="14" rx="2" fill="#3a2f22" stroke="#c49a5e" stroke-width="1.2"/><rect x="32" y="35" width="10" height="5" fill="#2e241a" stroke="#a77a3e" stroke-width="0.8"/><rect x="66" y="42" width="12" height="10" rx="2" fill="#1f1912" stroke="#9a6a32" stroke-width="1"/><path d="M24 48 L22 66 L30 66 L28 48 Z" fill="#5c482c" stroke="#cf9f5a" stroke-width="1"/><text x="50" y="70" font-size="6" fill="#c99a55" text-anchor="middle">AKM</text></svg>`;
+        }
+        if (hint === "scar") {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="27" y="39" width="54" height="14" rx="3" fill="#46412f" stroke="#ccaa6a" stroke-width="1.2"/><rect x="34" y="34" width="8" height="5" fill="#35301f" stroke="#a88642" stroke-width="0.8"/><rect x="68" y="41" width="12" height="10" rx="2" fill="#262214" stroke="#9c743a" stroke-width="1"/><rect x="25" y="53" width="5" height="17" rx="2" fill="#5a4c36" stroke="#e0b56a" stroke-width="1"/><text x="50" y="70" font-size="6" fill="#d6aa62" text-anchor="middle">SCAR</text></svg>`;
+        }
+        if (hint === "kar98" || hint === "kar98k") {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="20" y="42" width="58" height="11" rx="2" fill="#5e4c38" stroke="#dcb06c" stroke-width="1.2"/><rect x="68" y="39" width="14" height="17" rx="3" fill="#3e2e1e" stroke="#b5894a" stroke-width="1.2"/><ellipse cx="48" cy="47" rx="7" ry="5" fill="#2e241a" stroke="#ad823f" stroke-width="0.9"/><rect x="18" y="53" width="5" height="18" rx="2" fill="#6c5a46" stroke="#e7c281" stroke-width="1"/><text x="48" y="72" font-size="6" fill="#dea559" text-anchor="middle">KAR98</text></svg>`;
+        }
+        if (hint === "m24") {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="20" y="43" width="58" height="10" rx="2" fill="#44534a" stroke="#b9c382" stroke-width="1.2"/><rect x="66" y="40" width="14" height="16" rx="3" fill="#2c3c2e" stroke="#9bb05b" stroke-width="1.2"/><rect x="18" y="53" width="5" height="18" rx="2" fill="#5b6f5d" stroke="#cdda95" stroke-width="1"/><text x="48" y="72" font-size="6" fill="#b4c46a" text-anchor="middle">M24</text></svg>`;
+        }
+        if (hint === "svd") {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="24" y="42" width="54" height="11" rx="2" fill="#5c5c48" stroke="#cdcd7a" stroke-width="1.2"/><rect x="66" y="39" width="13" height="17" rx="3" fill="#3e3e2e" stroke="#adad5a" stroke-width="1.2"/><rect x="22" y="53" width="5" height="18" rx="2" fill="#6e6e5a" stroke="#e0e088" stroke-width="1"/><text x="48" y="72" font-size="6" fill="#c7c770" text-anchor="middle">SVD</text></svg>`;
+        }
+        if (hint === "ump") {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="32" y="44" width="46" height="12" rx="2" fill="#3a3a3a" stroke="#a0a0a0" stroke-width="1.2"/><rect x="36" y="40" width="6" height="4" fill="#2a2a2a"/><rect x="68" y="46" width="11" height="8" rx="2" fill="#1c1c1c" stroke="#707070" stroke-width="1"/><rect x="30" y="56" width="5" height="15" rx="2" fill="#5a4c3a" stroke="#cfa55a" stroke-width="1"/><text x="50" y="71" font-size="6" fill="#aaa" text-anchor="middle">UMP</text></svg>`;
+        }
+        if (hint === "vector") {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="30" y="45" width="48" height="11" rx="2" fill="#4d4742" stroke="#bbaa8a" stroke-width="1.2"/><rect x="68" y="47" width="10" height="7" rx="1" fill="#2e2e2e" stroke="#8f7a5a" stroke-width="1"/><rect x="28" y="56" width="4" height="14" rx="2" fill="#5c503e" stroke="#ddbb7a" stroke-width="1"/><text x="50" y="71" font-size="6" fill="#ccaa70" text-anchor="middle">VECTOR</text></svg>`;
+        }
+        if (hint === "dbs") {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="26" y="41" width="46" height="18" rx="3" fill="#5a452f" stroke="#dcb06c" stroke-width="1.2"/><rect x="62" y="44" width="12" height="12" rx="2" fill="#342415" stroke="#b5853a" stroke-width="1"/><rect x="68" y="48" width="4" height="5" rx="1" fill="#666"/><rect x="24" y="59" width="5" height="13" rx="2" fill="#6d5a45" stroke="#efcc82" stroke-width="1"/><text x="48" y="71" font-size="6" fill="#dcb06c" text-anchor="middle">DBS</text></svg>`;
+        }
+        if (hint === "m249") {
+            return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="42" width="58" height="13" rx="2" fill="#4e623c" stroke="#b8cf6a" stroke-width="1.2"/><rect x="70" y="44" width="8" height="9" rx="1" fill="#2e3e1e" stroke="#8fac4a" stroke-width="1"/><rect x="20" y="55" width="6" height="16" rx="2" fill="#5b7650" stroke="#d3ea88" stroke-width="1"/><text x="50" y="72" font-size="6" fill="#bdda6a" text-anchor="middle">M249</text></svg>`;
+        }
+        // универсальный красивый силуэт по умолчанию
+        return `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="30" y="42" width="46" height="13" rx="2" fill="#5a5a5a" stroke="#bcbcbc" stroke-width="1.2"/><rect x="66" y="44" width="10" height="9" rx="2" fill="#3a3a3a" stroke="#929292" stroke-width="1"/><rect x="28" y="55" width="5" height="16" rx="2" fill="#6a5e4a" stroke="#ddbb7a" stroke-width="1"/><text x="50" y="72" font-size="6" fill="#bcbcbc" text-anchor="middle">${weapon.name.substring(0, 5)}</text></svg>`;
+    }
 
     function getRandomWeapon() {
-        return weapons[Math.floor(Math.random() * weapons.length)];
+        const idx = Math.floor(Math.random() * weaponsDB.length);
+        return { ...weaponsDB[idx] };
     }
 
-    function getTwoWeapons() {
-        let w1 = getRandomWeapon();
-        let w2 = getRandomWeapon();
-        while (w1 === w2) {
-            w2 = getRandomWeapon();
+    function getTwoDistinctWeapons() {
+        let a = getRandomWeapon();
+        let b = getRandomWeapon();
+        let tries = 0;
+        while (a.name === b.name && tries < 8) {
+            b = getRandomWeapon();
+            tries++;
         }
-        return [w1, w2];
+        return [a, b];
     }
+
+    // DOM elements
+    const slot1 = document.getElementById('weaponSlot1');
+    const slot2 = document.getElementById('weaponSlot2');
+    const name1 = document.getElementById('weaponName1');
+    const icon1 = document.getElementById('weaponIcon1');
+    const type1 = document.getElementById('weaponType1');
+    const name2 = document.getElementById('weaponName2');
+    const icon2 = document.getElementById('weaponIcon2');
+    const type2 = document.getElementById('weaponType2');
+    const rollBtn = document.getElementById('rollBtn');
 
     function animateSlot(slot) {
-        slot.classList.add('animate');
-        setTimeout(() => slot.classList.remove('animate'), 300);
+        slot.classList.add('animate-weapon');
+        setTimeout(() => slot.classList.remove('animate-weapon'), 340);
     }
 
     function updateUI() {
-        const [w1, w2] = getTwoWeapons();
-        
-        document.getElementById('name1').innerText = w1;
-        document.getElementById('icon1').innerHTML = weaponIcons[w1] || "🔫";
-        document.getElementById('type1').innerText = weaponTypes[w1];
-        
-        document.getElementById('name2').innerText = w2;
-        document.getElementById('icon2').innerHTML = weaponIcons[w2] || "🔫";
-        document.getElementById('type2').innerText = weaponTypes[w2];
-        
-        animateSlot(document.getElementById('slot1'));
-        animateSlot(document.getElementById('slot2'));
+        const [w1, w2] = getTwoDistinctWeapons();
+        name1.innerText = w1.name;
+        type1.innerText = w1.type;
+        icon1.innerHTML = getWeaponSVG(w1);
+        name2.innerText = w2.name;
+        type2.innerText = w2.type;
+        icon2.innerHTML = getWeaponSVG(w2);
+        animateSlot(slot1);
+        animateSlot(slot2);
+        // кнопочный эффект
+        rollBtn.style.transform = 'scale(0.97)';
+        setTimeout(() => { rollBtn.style.transform = ''; }, 100);
     }
 
-    document.getElementById('rollBtn').addEventListener('click', updateUI);
-    
-    // Запуск при загрузке
-    updateUI();
+    rollBtn.addEventListener('click', () => {
+        updateUI();
+        rollBtn.style.boxShadow = '0 5px 0 #0f130b';
+        setTimeout(() => { rollBtn.style.boxShadow = '0 8px 0 #0f130b'; }, 90);
+    });
+
+    // инициализация при загрузке
+    (function init() {
+        const [first, second] = getTwoDistinctWeapons();
+        name1.innerText = first.name;
+        type1.innerText = first.type;
+        icon1.innerHTML = getWeaponSVG(first);
+        name2.innerText = second.name;
+        type2.innerText = second.type;
+        icon2.innerHTML = getWeaponSVG(second);
+        setTimeout(() => {
+            animateSlot(slot1);
+            animateSlot(slot2);
+        }, 100);
+    })();
+
+    // поддержка клавиши ПРОБЕЛ для реролла
+    window.addEventListener('keydown', (e) => {
+        if (e.code === 'Space' && !e.repeat && document.activeElement !== rollBtn) {
+            e.preventDefault();
+            updateUI();
+        }
+    });
 </script>
 </body>
 </html>
